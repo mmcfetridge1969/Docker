@@ -1,0 +1,129 @@
+version: "3"
+
+services:
+  
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    ports:
+      - "8000:8000/tcp" 
+      - "9000:9000/tcp" 
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock' 
+      - '/home/username/portainer/data:/data' 
+    restart: unless-stopped
+    
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "80:80/tcp"
+    environment:
+      TZ: 'America/new_york'
+      WEBPASSWORD: 'set a secure password here or it will be random'
+    volumes:
+      - './etc-pihole/:/etc/pihole/'
+      - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
+      # run `touch ./var-log/pihole.log` first unless you like errors
+      - './var-log/pihole.log:/var/log/pihole.log'
+    # Recommended but not required (DHCP needs NET_ADMIN)
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+
+  nginx_proxy:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    environment: #update the below with your DB name, username and password
+      DB_MYSQL_HOST: "db"
+      DB_MYSQL_PORT: 3306
+      DB_MYSQL_USER: "npm"
+      DB_MYSQL_PASSWORD: "npm"
+      DB_MYSQL_NAME: "npm"  
+    volumes:
+      - /home/nginxproxy/data:/data
+      - /home/nginxproxy/letsencrypt:/etc/letsencrypt
+  Proxy_db:
+    image: 'jc21/mariadb-aria:latest'
+    restart: unless-stopped
+    environment: # copy this information from the above you created and add a root password
+      MYSQL_ROOT_PASSWORD: 'npm'
+      MYSQL_DATABASE: 'npm'
+      MYSQL_USER: 'npm'
+      MYSQL_PASSWORD: 'npm'
+    volumes:
+      - /home/nginxproxy/mysql:/var/lib/mysql
+  
+  nextcloud_db:
+    image: mariadb:latest
+    container_name: nextcloud-mariadb
+    ports:
+      - "3306:3306"
+    networks:
+      - nextcloud_network
+    volumes:
+      - db:/mnt/mariadb-data
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_USER=nextcloud_db_user
+      - MYSQL_PASSWORD=secret
+      - MYSQL_DATABASE=nextcloud
+      - TRANSACTION_ISOLATION=READ-COMMITTED
+    restart: unless-stopped
+  nextcloud_app:
+    image: nextcloud:latest
+    container_name: nextcloud
+    networks:
+      - nextcloud_network
+    depends_on:
+      - db
+    volumes:
+      - nextcloud:/var/www/html
+      - ./app/data:/mnt/nextcloud-data
+      - ./app/config:/mnt/nextcloud-config
+      - ./app/apps:/var/www/html/apps
+      - ./app/custom_apps:/var/www/html/custom_apps
+      - ./app/themes:/var/www/html/themes
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - MYSQL_HOST=db
+    restart: unless-stopped
+    volumes:
+      nextcloud:
+      db:
+  networks:
+    nextcloud_network:
+  
+  uptime-kuma: 
+    container_name: uptime-kuma
+    image: "louislam/uptime-kuma:1"
+    ports: 
+      - "3001:3001/tcp"
+    restart: unless-stopped
+    volumes: 
+      - "/home/username/uptime-kuma:/app/data"
+
+  grafana: 
+    container_name: grafana
+    image: "grafana/grafana"
+    ports: 
+      - "3000:3000/tcp"
+    restart: unless-stopped
+    
+  prometheus: 
+    container_name: prometheus
+    image: "prom/prometheus"
+    ports: 
+      - "9091:9090/tcp"
+    restart: unless-stopped
+    volumes: 
+      - "/home/username/prometheus:/etc/prometheus"
