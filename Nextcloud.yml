@@ -1,0 +1,47 @@
+version: '3' 
+
+services:
+
+  db:
+    image: mariadb:latest
+    container_name: nextcloud-mariadb
+    ports:
+      - "3306:3306"
+    networks:
+      - nextcloud_network
+    volumes:
+      - db:/mnt/mariadb-data
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_USER=nextcloud_db_user
+      - MYSQL_PASSWORD=secret
+      - MYSQL_DATABASE=nextcloud
+      - TRANSACTION_ISOLATION=READ-COMMITTED
+    restart: unless-stopped
+  
+  app:
+    image: nextcloud:latest
+    container_name: nextcloud
+    networks:
+      - nextcloud_network
+    depends_on:
+      - db
+    volumes:
+      - nextcloud:/var/www/html
+      - ./app/data:/mnt/nextcloud-data
+      - ./app/config:/mnt/nextcloud-config
+      - ./app/apps:/var/www/html/apps
+      - ./app/custom_apps:/var/www/html/custom_apps
+      - ./app/themes:/var/www/html/themes
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - MYSQL_HOST=db
+    restart: unless-stopped
+
+volumes:
+  nextcloud:
+  db:
+
+networks:
+  nextcloud_network:
