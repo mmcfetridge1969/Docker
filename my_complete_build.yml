@@ -1,4 +1,4 @@
-version: "3"
+    version: "3"
 
 services:
   
@@ -149,3 +149,47 @@ services:
       - /sys:/host/sys:ro
       - /etc/os-release:/host/etc/os-release:ro
 
+  wordpressweb:
+    image: wordpress:latest
+    ports:
+      - 8005:80
+    volumes:
+      - /home/mmcfetridge/wordpress/config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
+      - /home/mmcfetridge/wordpress/html:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: wordpressdb
+      WORDPRESS_DB_NAME: "wordpress"
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: "Generate with app"
+    depends_on:
+      - wordpressdb
+    links:
+      - wordpressdb
+  wpcli:
+    image: wordpress:cli
+    volumes:
+      - /home/mmcfetridge/wordpress/config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
+      - /home/mmcfetridge/wordpress/html:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: wordpressdb
+      WORDPRESS_DB_NAME: "wordpress"
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: "Generate with app"
+    depends_on:
+      - wordpressdb
+      - wordpressweb
+  wordpressdb:
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    command: [
+        '--default_authentication_plugin=mysql_native_password',
+        '--character-set-server=utf8mb4',
+        '--collation-server=utf8mb4_unicode_ci'
+    ]
+    volumes:
+      - /home/mmcfetridge/wordpress/data:/docker-entrypoint-initdb.d
+      - /home/mmcfetridge/wordpress/mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: "wordpress"
+      MYSQL_ROOT_PASSWORD: "Generate with app"
