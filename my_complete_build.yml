@@ -1,4 +1,4 @@
-    version: "3"
+version: "3"
 
 services:
   
@@ -21,10 +21,10 @@ services:
       - "53:53/tcp"
       - "53:53/udp"
       - "67:67/udp"
-      - "80:80/tcp"
+      - "800:80/tcp"
     environment:
       TZ: 'America/new_york'
-      WEBPASSWORD: 'set a secure password here or it will be random'
+      WEBPASSWORD: 'adminadmin'   #need to change this password
     volumes:
       - './etc-pihole/:/etc/pihole/'
       - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
@@ -61,48 +61,7 @@ services:
       MYSQL_PASSWORD: 'npm'
     volumes:
       - /home/nginxproxy/mysql:/var/lib/mysql
-  
-  nextcloud_db:
-    image: mariadb:latest
-    container_name: nextcloud-mariadb
-    ports:
-      - "3306:3306"
-    networks:
-      - nextcloud_network
-    volumes:
-      - db:/mnt/mariadb-data
-      - /etc/localtime:/etc/localtime:ro
-    environment:
-      - MYSQL_ROOT_PASSWORD=secret
-      - MYSQL_USER=nextcloud_db_user
-      - MYSQL_PASSWORD=secret
-      - MYSQL_DATABASE=nextcloud
-      - TRANSACTION_ISOLATION=READ-COMMITTED
-    restart: unless-stopped
-  nextcloud_app:
-    image: nextcloud:latest
-    container_name: nextcloud
-    networks:
-      - nextcloud_network
-    depends_on:
-      - db
-    volumes:
-      - nextcloud:/var/www/html
-      - ./app/data:/mnt/nextcloud-data
-      - ./app/config:/mnt/nextcloud-config
-      - ./app/apps:/var/www/html/apps
-      - ./app/custom_apps:/var/www/html/custom_apps
-      - ./app/themes:/var/www/html/themes
-      - /etc/localtime:/etc/localtime:ro
-    environment:
-      - MYSQL_HOST=db
-    restart: unless-stopped
-    volumes:
-      nextcloud:
-      db:
-  networks:
-    nextcloud_network:
-  
+    
   uptime-kuma: 
     container_name: uptime-kuma
     image: "louislam/uptime-kuma:1"
@@ -112,22 +71,6 @@ services:
     volumes: 
       - "/home/username/uptime-kuma:/app/data"
 
-  grafana: 
-    container_name: grafana
-    image: "grafana/grafana"
-    ports: 
-      - "3000:3000/tcp"
-    restart: unless-stopped
-    
-  prometheus: 
-    container_name: prometheus
-    image: "prom/prometheus"
-    ports: 
-      - "9091:9090/tcp"
-    restart: unless-stopped
-    volumes: 
-      - "/home/username/prometheus:/etc/prometheus"
-  
   netdata:
     image: netdata/netdata
     container_name: netdata
@@ -149,47 +92,3 @@ services:
       - /sys:/host/sys:ro
       - /etc/os-release:/host/etc/os-release:ro
 
-  wordpressweb:
-    image: wordpress:latest
-    ports:
-      - 8005:80
-    volumes:
-      - /home/mmcfetridge/wordpress/config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
-      - /home/mmcfetridge/wordpress/html:/var/www/html
-    environment:
-      WORDPRESS_DB_HOST: wordpressdb
-      WORDPRESS_DB_NAME: "wordpress"
-      WORDPRESS_DB_USER: root
-      WORDPRESS_DB_PASSWORD: "Generate with app"
-    depends_on:
-      - wordpressdb
-    links:
-      - wordpressdb
-  wpcli:
-    image: wordpress:cli
-    volumes:
-      - /home/mmcfetridge/wordpress/config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
-      - /home/mmcfetridge/wordpress/html:/var/www/html
-    environment:
-      WORDPRESS_DB_HOST: wordpressdb
-      WORDPRESS_DB_NAME: "wordpress"
-      WORDPRESS_DB_USER: root
-      WORDPRESS_DB_PASSWORD: "Generate with app"
-    depends_on:
-      - wordpressdb
-      - wordpressweb
-  wordpressdb:
-    image: mysql:latest
-    ports:
-      - 3306:3306
-    command: [
-        '--default_authentication_plugin=mysql_native_password',
-        '--character-set-server=utf8mb4',
-        '--collation-server=utf8mb4_unicode_ci'
-    ]
-    volumes:
-      - /home/mmcfetridge/wordpress/data:/docker-entrypoint-initdb.d
-      - /home/mmcfetridge/wordpress/mysql:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: "wordpress"
-      MYSQL_ROOT_PASSWORD: "Generate with app"
