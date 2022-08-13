@@ -35,6 +35,16 @@ services:
       - NET_ADMIN
     restart: unless-stopped
 
+#  If port 53 is used do the following steps to fix it
+        # sudo systemctl stop systemd-resolved
+        # sudo nano /etc/systemd/resolved.conf
+        # change in the file
+        # DNS=8.8.8.8.  and  DNSSTubeListener=no
+        # Save file
+        # sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+
+
+
   nginx_proxy:
     image: 'jc21/nginx-proxy-manager:latest'
     restart: unless-stopped
