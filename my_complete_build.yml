@@ -81,10 +81,16 @@ services:
     volumes: 
       - "/home/username/uptime-kuma:/app/data"
 
+version: '3'
+services:
   netdata:
     image: netdata/netdata
     container_name: netdata
-    hostname: example.com # set to fqdn of host
+    environment:
+      PUID: 1001
+      PGID: 1001
+
+    hostname: http://netdata.mikeandrebel.com # set to fqdn of host
     ports:
       - 19999:19999
     restart: unless-stopped
@@ -93,12 +99,16 @@ services:
     security_opt:
       - apparmor:unconfined
     volumes:
-      - /home/username/netdataconfig:/etc/netdata
-      - /home/username/netdatalib:/var/lib/netdata
-      - /home/username/netdatacache:/var/cache/netdata
+      - /home/ubuntu/netdata/netdataconfig:/etc/netdata
+      - /home/ubuntu/netdata/netdatalib:/var/lib/netdata
+      - /home/ubuntu/netdata/netdatacache:/var/cache/netdata
       - /etc/passwd:/host/etc/passwd:ro
       - /etc/group:/host/etc/group:ro
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /etc/os-release:/host/etc/os-release:ro
 
+volumes:
+  netdataconfig:
+  netdatalib:
+  netdatacache:

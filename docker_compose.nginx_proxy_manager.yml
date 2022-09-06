@@ -10,19 +10,20 @@ services:
     environment:
       DB_MYSQL_HOST: "db"
       DB_MYSQL_PORT: 3306
-      DB_MYSQL_USER: "npm"
-      DB_MYSQL_PASSWORD: "npm"
+      DB_MYSQL_USER: "mmcfetridge"
+      DB_MYSQL_PASSWORD: "!Sucyetat1"
       DB_MYSQL_NAME: "npm"
     volumes:
-      - ./data:/data
-      - ./letsencrypt:/etc/letsencrypt
+      - /home/ubuntu/nginx-proxy-manager/data:/data
+      - /home/ubuntu/nginx-proxy-manager/letsencrypt:/etc/letsencrypt
   db:
     image: 'jc21/mariadb-aria:latest'
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: 'npm'
+      MYSQL_ROOT_PASSWORD: '!Sucyetat1'
       MYSQL_DATABASE: 'npm'
-      MYSQL_USER: 'npm'
-      MYSQL_PASSWORD: 'npm'
+      MYSQL_USER: 'mmcfetridge'
+      MYSQL_PASSWORD: '!Sucyetat1'
     volumes:
-      - ./data/mysql:/var/lib/mysql
+      - /home/ubuntu/nginx-proxy-manager/data/mysql:/var/lib/mysql
+
