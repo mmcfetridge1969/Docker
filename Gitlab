@@ -1,0 +1,178 @@
+How to install and configure GITLAB
+
+https://www.czerniga.it/2021/11/14/how-to-install-gitlab-using-docker-compose/
+
+We will start work on the installation by creating a dedicated directory in which we will store data and Gitlab configuration.
+
+> mkdir gitlab
+
+For convenience, we will also set an environment variable that will contain the path to our Gitlab directory:
+
+> export GITLAB_HOME=$(pwd)/gitlab
+
+In the next step, we create the docker-compose.yml file with the following content:
+
+# docker-compose.yml
+version: '3.7'
+services:
+  web:
+    image: 'gitlab/gitlab-ce:latest'
+    restart: always
+    hostname: 'localhost'
+    container_name: gitlab-ce
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://gitlab.mikeandrebel.com'
+    ports:
+      - '8085:80'
+      - '8445:443'
+    volumes:
+      - '/home/miker/gitlab/config:/etc/gitlab'
+      - '/home/miker/gitlab/logs:/var/log/gitlab'
+      - '/home/miker/gitlab/data:/var/opt/gitlab'
+    networks:
+      - gitlab
+  gitlab-runner:
+    image: gitlab/gitlab-runner:alpine
+    container_name: gitlab-runner
+    restart: always
+    depends_on:
+      - web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - '/home/miker/gitlab/gitlab-runner:/etc/gitlab-runner'
+    networks:
+      - gitlab
+
+networks:
+  gitlab:
+    name: gitlab-network
+
+This configuration defines what containers we want to run. In our case, it will be the GitLab service with one GitLab runner (a separate module for running CI / CD tasks). The most important configuration parameters are:
+
+    image – docker image that we want to use in our server
+    ports – a list of ports that we make available outside the container. In our configuration, we provide ports 80, 443 (website)
+    container_name – the name of our container
+    volumes – specifies the volumes that are used by the container. In our configuration, we have directories shared with our system (subdirectories in $ GITLAB_HOME) and an additional volume that allows access to the Docker environment from the GitLab runner.
+    networks – defines the virtual network in which the containers will operate. In our case, the www portal and the runner operate in one “gitlab-network”
+
+Gitlab installation
+
+Containers are started using the command:
+
+> Run: docker-compose up -d && docker-compose logs -f
+
+Once launched, Docker will download GitLab and GitLab Runner images from the servers. On my computer it looked like this:
+Docker compose
+Docker compose
+
+To log in to GitLab for the first time, you need a temporary password, which is generated automatically during installation. We get the password using the command:
+
+> docker exec -it gitlab-ce grep 'Password:' /etc/gitlab/initial_root_password
+
+GitLab launching
+
+Our GitLab is available at: http://localhost:8080. After going to this address, the following screen should appear:
+
+Note: The first launch of the portal may take several minutes.
+
+To log in to the portal, we must enter the “root” in Username field and the temporary password that we obtained earlier in the Password field.
+
+After logging in, the following screen should appear:
+GitLab
+Gitlab
+
+Congratulations, GitLab has been successfully launched!
+Initial configuration of the portal
+
+Before we proceed, it is worth changing a few portal settings. First, we’ll turn off open registration for everyone. To do this, click the View Setting button available on the upper bar with a warning (address to the panel; http://localhost:8080/admin/application_settings/general#js-signup-settings ). On the new page, uncheck Sign-up enabled and save the changes.
+
+The next step should be to change the root user. To do this, go to the website: http://localhost:8080/-/profile/account and enter the name in the Change username field. We approve by clicking on Update username.
+
+The last change we will make is to change the password. To do this, go to the page: ost:8080/-/profile/password/edit and enter a temporary password and a new password. We approve the change by clicking Save password.
+GitLab runner configuration
+
+To use the GitLab runner in GitLab, you need to configure it. For correct configuration, we will need a token copied from the portal. To do this, go to the address: http://localhost:8080/admin/runners and click the Copy token button.
+
+In the next step, it goes to the console and run the following command:
+
+> docker exec -it gitlab-runner gitlab-runner register --url "http://gitlab-ce" --clone-url "http://gitlab-ce"
+
+After launching, a configuration module will appear. The module provides the following information:
+
+    Enter the GitLab instance URL: confirm the entered value (click enter)
+    Enter the registration token: enter the token copied before.
+    Enter a description for the runner: enter the name of the runner, e.g. docker-runner
+    Enter tags for the runner: leave the field blank here
+    Enter an executor: enter docker here
+    Enter the default Docker image: here we provide the default docker image, e.g. maven: latest
+
+After proper configuration, we should see confirmation Runner registred successfully:
+
+In addition to the basic configuration, we also need to allow access for containers launched from the runner to the virtual network in which GitLab operates. To do this, we run the editor (e.g. vi)
+
+>  sudo vi gitlab/gitlab-runner/config.toml
+
+Then we add new line to the end of the runner configuration: network_mode = “gitlab-network”
+
+To check if the runner is available from the GitLab level, go to the following address:http://localhost:8080/admin/runners
+
+We create our first repository
+
+After setting up the runner, we can create our first repository. To do this, go to the page: http://localhost:8080/projects/new and click Import project.
+
+Na następnym ekranie wybieramy Import project from: Repo from URL. Następnie podajemy w Git repository URL adress: https://github.com/czerniga/helloworld.git. Na końcu zatwierdzamy klikając Create project.
+
+On the next screen, select Import project from: Repo from URL. Then we provide the Git repository URL address: https://github.com/czerniga/helloworld.git. Finally, confirm by clicking Create project.
+
+After a while you should have the first repository copied to your GitLab.
+
+We create the CI/CD pipeline
+
+To create a CI/CD pipeline for the project, click the main menu on the left, CI/CD, and then Editor. An option to create a .gitlab-ci.yml file, which will contain our pipeline definitions, will appear on the screen. This file will be created in the Git repository.
+
+On the new screen we can see our pipeline editor. In the editor, paste the following content:
+
+image: maven:latest
+
+stages:
+  - build
+  - test
+
+build-job:
+  stage: build
+  script:
+    - echo "Compiling the code..."
+    - mvn clean package
+    - echo "Compile complete."
+  artifacts:
+    paths:
+    - target
+
+test-job:
+  stage: test
+  dependencies:
+    - build-job
+  script:
+    - ls -al
+    - echo "Running tests"
+    - java -cp target/helloworld-1.1.jar com.coveros.demo.helloworld.HelloWorld
+
+The above definition describes how the CI / CD process should work. The most important elements are:
+
+    image: docker image that we will use to build our project
+    stages: a list of our process steps
+    build-job: the first step in our process to build our project. Additionally, we save the artifacts for use in the next step
+    test-job: the second step to run our project
+
+After pasting our file, confirm the changes by clicking Commit changes.
+
+Once approved, GitLab will launch the process. To check its results, go to CI/CD -> Pipelines in the menu on the left. On the screen we should see that our first task has already been started.
+
+We can go to the details of this task by clicking on the pending button or the build number #1
+
+After a while, the task should be built and tested.
+How to install GitLab using Docker Compose
+How to install GitLab using Docker Compose
+
+Congratulations, you have just created your first CI/CD job in GitLab!
