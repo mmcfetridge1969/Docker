@@ -20,7 +20,7 @@ services:
       - LOGIN_RATELIMIT_SECONDS=60
       - ADMIN_RATELIMIT_MAX_BURST=10
       - ADMIN_RATELIMIT_SECONDS=60
-      - ADMIN_TOKEN=7njaeZSTKX9mz4J5qpyn88LyUVtSPZsbbkKiED5Z
+      - ADMIN_TOKEN=
       - SENDS_ALLOWED=true
       - EMERGENCY_ACCESS_ALLOWED=true
       - WEB_VAULT_ENABLED=true
@@ -35,7 +35,7 @@ services:
       - SMTP_SECURITY=starttls
       - SMTP_PORT=587
       - SMTP_USERNAME=vaultwarden@mcfetridge.us
-      - SMTP_PASSWORD= !Sucyetat123
+      - SMTP_PASSWORD= 
       - SMTP_AUTH_MECHANISM="Login"
 
 
