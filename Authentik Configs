@@ -100,22 +100,22 @@ volumes:
 
                                                          .env
 PG_USER=authentik
-PG_PASS=VTu9b5k3aTYHJ8LdXX3DjsGTVr3TeXqwvw7pQa3V
-AUTHENTIK_SECRET_KEY=YFKJs3BUR4NghFp8QmGuYbcHyUZffdGp5sywwjNq
+PG_PASS=make strong
+AUTHENTIK_SECRET_KEY=make strong
 AUTHENTIK_ERROR_REPORTING__ENABLED=true
 # SMTP Host Emails are sent to
-AUTHENTIK_EMAIL__HOST=mail.mcfetridge.us
+AUTHENTIK_EMAIL__HOST=mail
 AUTHENTIK_EMAIL__PORT=587
 # Optionally authenticate (don't add quotation marks to your password)
-AUTHENTIK_EMAIL__USERNAME=miker.mcfetridge.us
-AUTHENTIK_EMAIL__PASSWORD=!Sucyetat123
+AUTHENTIK_EMAIL__USERNAME=email
+AUTHENTIK_EMAIL__PASSWORD=password
 # Use StartTLS
 AUTHENTIK_EMAIL__USE_TLS=false
 # Use SSL
 AUTHENTIK_EMAIL__USE_SSL=true
 AUTHENTIK_EMAIL__TIMEOUT=10
 # Email address authentik will send from, should have a correct @domain
-AUTHENTIK_EMAIL__FROM=auth@mcfetridge.us
+AUTHENTIK_EMAIL__FROM=auth@email
 COMPOSE_PORT_HTTP=8941
 COMPOSE_PORT_HTTPS=4443
 # Authentik Version to Pull
