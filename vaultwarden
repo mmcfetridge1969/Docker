@@ -20,7 +20,7 @@ services:
       - LOGIN_RATELIMIT_SECONDS=60
       - ADMIN_RATELIMIT_MAX_BURST=10
       - ADMIN_RATELIMIT_SECONDS=60
-      - ADMIN_TOKEN=7njaeZSTKX9mz4J5qpyn88LyUVtSPZsbbkKiED5Z
+      - ADMIN_TOKEN=create_token
       - SENDS_ALLOWED=true
       - EMERGENCY_ACCESS_ALLOWED=true
       - WEB_VAULT_ENABLED=true
@@ -28,14 +28,14 @@ services:
       - SIGNUPS_VERIFY=true
       - SIGNUPS_VERIFY_RESEND_TIME=3600
       - SIGNUPS_VERIFY_RESEND_LIMIT=5
-      - SIGNUPS_DOMAINS_WHITELIST=mcfetridge.us,mikeandrebel.com
+      - SIGNUPS_DOMAINS_WHITELIST=example.us,example1.com
       - SMTP_HOST=mail.mcfetridge.us
-      - SMTP_FROM=vaultwarden@mcfetridge.us
+      - SMTP_FROM=vaultwarden@example.us
       - SMTP_FROM_NAME=Vaultwarden
       - SMTP_SECURITY=starttls
       - SMTP_PORT=587
-      - SMTP_USERNAME=vaultwarden@mcfetridge.us
-      - SMTP_PASSWORD= !Sucyetat123
+      - SMTP_USERNAME=vaultwarden@example.us
+      - SMTP_PASSWORD= !password
       - SMTP_AUTH_MECHANISM="Login"
 
 
