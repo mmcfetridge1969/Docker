@@ -1,0 +1,19 @@
+netalertx (Pi Alert) installation
+
+version: "3"
+services:
+  netalertx:
+    container_name: netalertx
+    # use the below line if you want to test the latest dev image
+    # image: "jokobsk/netalertx-dev:latest"
+    image: "jokobsk/netalertx:latest"
+    network_mode: "host"
+    restart: unless-stopped
+    volumes:
+      - /home/miker/docker/netalert/config:/app/config
+      - /home/miker/docker/netalert/db:/app/db
+      # (optional) useful for debugging if you have issues setting up the container
+      - /home/miker/docker/netalert/logs:/app/front/log
+    environment:
+      - TZ=America/New_York
+      - PORT=20211
