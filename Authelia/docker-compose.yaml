@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  authelia:
+    image: authelia/authelia
+    container_name: authelia
+    volumes:
+      - /home/ubuntu/docker/authelia/config:/config
+    networks:
+      - proxy
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - 9091:9091
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/London
+    healthcheck:
+      disable: true
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    volumes:
+      - /home/ubuntu/docker/redis:/data
+    networks:
+      - proxy
+    expose:
+      - 6379
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/London
+
+
+networks:
+  proxy:
+    external: true

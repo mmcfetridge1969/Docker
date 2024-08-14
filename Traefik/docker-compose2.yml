@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - proxy
+    ports:
+      - 80:80
+      - 443:443
+     environment:
+      NAMECHEAP_API_KEY_FILE: /run/secrets/nc_api_token # note using _FILE for docker secrets
+      NAMECHEAP_API_USER: mmcfetridge
+     secrets:
+      - nc_api_token # Points to the secrets file at the bottom of the page.
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data/traefik.yml:/traefik.yml:ro  # File contains the dashboard config and the letsencrpt setup.
+      - ./data/acme.json:/acme.json  # Point to the location of the file for the stored letsencrpt certs.
+      # - ./data/config.yml:/config.yml:ro  # Include if running on you local lan to have Proxmox have a signed cert.
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.routers.traefik.rule=Host(`traefik-dashboard.mikeandrebel.com`)"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=miker:$$2y$$05$$uVgKaCGtectjC5FTVJljvOXXM3.inQD23pCnmMiclPgFJGPJpLbPu " # Dashboard creds
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.traefik-secure.entrypoints=https"
+      - "traefik.http.routers.traefik-secure.rule=Host(`traefik-dashboard.mikeandrebel.com`)"
+      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.traefik-secure.tls=true"
+      - "traefik.http.routers.traefik-secure.tls.certresolver=namecheap"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=mikeandrebel.com"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.mikeandrebel.com"
+      - "traefik.http.routers.traefik-secure.service=api@internal"
+
+secrets:
+  nc_api_token:
+    file: ./nc_api_token.txt
+
+networks:
+  proxy:
+    external: true
+
+

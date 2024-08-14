@@ -1,0 +1,136 @@
+---
+services:
+
+# The gluetun container is a VPN proxy that routes all traffic through a VPN connection.
+  # It uses the Wireguard protocol to connect to the AirVPN service and provides a firewall
+  # that allows incoming connections on port 29261 (for qBittorrent).
+  # The container exposes various ports for the different applications that will be routed
+  # through the VPN, including Prowlarr, Sonarr, Radarr, Readarr, qBittorrent, Firefox,
+  # and Jackett.
+  # The container uses environment variables to configure the VPN connection details and
+  # the allowed firewall ports.
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+      # Adding SYS_MODULE capability to allow loading kernel modules (if needed for VPN)
+      - SYS_MODULE
+      # Adding NET_RAW capability for advanced network operations
+      - NET_RAW
+    ports:
+      - 9696:9696 # prowlarr
+      - 8989:8989 #sonarr
+      - 7878:7878 #radarr
+      - 8787:8787 #readarr
+      - 29261:29261 #qbittorrent 
+      - 8118:8118 #qbittorrent web
+      - 3000:3000 #firefox http
+      - 3001:3001 # Firefox https
+      - 9117:9117 #jackett
+      - 5055:5055 #jellyseerr
+    volumes:
+      - /home/miker/docker/gluetun:/gluetun
+    environment:
+      - VPN_SERVICE_PROVIDER=airvpn
+      - VPN_TYPE=wireguard
+      - FIREWALL_VPN_INPUT_PORTS=29261
+      - WIREGUARD_PRIVATE_KEY=eDgf3GPFy2ltgx2RkD/Vx5wKZ4dVi28YbQmSJOrbWmk=
+      - WIREGUARD_PRESHARED_KEY=+0+hrSdzRUxKDNk1Q37PNmNJ2jsj2EzF45JtbZad4lI=
+      - WIREGUARD_ADDRESSES=10.175.23.30
+      - SERVER_COUNTRIES=Canada
+    restart: unless-stopped
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/New_york
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/miker/docker/prowlarr:/config
+      - /home/miker/docker/data:/data
+    restart: unless-stopped
+    network_mode: service:gluetun
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/New_york
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/miker/docker/sonarr:/config
+      - /home/miker/docker/data:/data
+    network_mode: service:gluetun
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/New_York
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/miker/docker/radarr:/config
+      - /home/miker/docker/data:/data
+    network_mode: service:gluetun
+
+  readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/New_York
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/miker/docker/readarr:/config
+      - /home/miker/docker/data:/data
+    network_mode: service:gluetun
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/New_York
+      - WEBUI_PORT=8118
+      - TORRENTING_PORT=29261
+    volumes:
+      - /home/miker/docker/qbittorrent:/config
+      - /home/miker/docker/data:/data #optional
+    restart: unless-stopped
+    network_mode: service:gluetun
+
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      - LOG_LEVEL=debug
+      - PUID=0
+      - PGID=0
+      - TZ=America/New_York
+    volumes:
+      - /home/miker/docker/jellyseerr/config:/app/config
+    restart: unless-stopped
+    network_mode: service:gluetun
+
+  firefox:
+    network_mode: service:gluetun
+    image: linuxserver/firefox:latest
+    shm_size: 1gb
+    volumes:
+      - /home/miker/docker/firefox:/config
+    environment:
+      - TZ=America/New_York
+      - PGID=1000
+      - PUID=1000
+    container_name: firefox

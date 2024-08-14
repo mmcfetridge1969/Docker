@@ -1,0 +1,46 @@
+services:
+  mealie:
+    image: ghcr.io/mealie-recipes/mealie:latest  # Specifies the Mealie Docker i>
+    container_name: mealie                      # Names the container for easier>
+    restart: always
+    networks:
+      - proxy                              # Ensures the container restart>
+#    ports:
+#      - "9925:9000"                             # Maps port 9925 on the host to >
+    deploy:
+      resources:
+        limits:
+          memory: 1000M                         # Limits the container to use a >
+    volumes:
+      - /home/miker/docker/mealie/data:/app/data/                  # Persists data in>
+      - ./config/addons_config/mealie/config.yaml:/config/config.yanl
+    environment:
+      - ALLOW_SIGNUP=false                      # Allows new user signups on the>
+      - PUID=1000                               # Sets the user ID for the conta>
+      - PGID=1000                               # Sets the group ID for the cont>
+      - TZ=America/New_York                     # Sets the timezone for the cont>
+      - MAX_WORKERS=1                           # Limits the number of workers t>
+      - WEB_CONCURRENCY=1                       # Sets the concurrency level for>
+      - BASE_URL=mealie.mikemcfetridge.com      # The base URL where Mealie is a>
+      # Email Settings
+      - SMTP_HOST=mail.mcfetridge.us
+      - SMTP_PORT=587
+      - SMTP_FROM_NAME=miker@mcfetridge.us
+      - SMTP_AUTH_STRATEGY=TLS
+      - SMTP_FROM_EMAIL=miker@mcfetridge.us
+      - SMTP_USER=miker@mcfetridge.us
+      - SMTP_PASSWORD=${EM_PASS}
+      # OIDC Settings
+#      - OIDC_AUTH_ENABLED=true
+#      - OIDC_SIGNUP_ENABLED=true
+#      - OIDC_CONFIGURATION_URL=https://authentik.mikemcfetridge.com/application/o/mealie-demo/.well-known/openid-configuration
+#      - OIDC_CLIENT_ID=jlLP0jnvmRqWtKNEU8HY64ZFIuxoCV08VkSANkYy
+#      - OIDC_AUTO_REDIRECT=true
+#      - OIDC_REMEMBER_ME=true
+#      - OIDC_USER_GROUP=AppGroups
+#      - OIDC_ADMIN_GROUP=authentik Admins
+    env_file:
+      - .env
+networks:
+  proxy:
+    external: true

@@ -1,0 +1,22 @@
+URL for the task template
+
+ansible/update/update-apt-packages.yaml
+
+
+
+
+
+Need to create two files:
+
+In order to ensure Semaphore can run commands properly, we’ll need a line similar to the one below added to /etc/sudoers.d/semaphore on the target (the instance that our Semaphore server will be configuring). Be sure to replace semaphore in both the file name and inside the file to match the username of the user you intend to use with Semaphore.
+
+semaphore file
+semaphore ALL=(ALL) NOPASSWD: ALL
+
+miker file
+miker ALL=(ALL) NOPASSWD: ALL
+
+Need to be logged into Ubuntu03, go to the .ssh directory and run the following command to copy over the rsa.pub file.
+scp id_rsa.pub miker@192.168.0.181:/home/miker/.ssh
+or
+ssh-copy-id miker@192.168.0.185

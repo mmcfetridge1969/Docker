@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="https://gmpg.org/xfn/11">
+	<title>Complete Ansible Semaphore Tutorial: From Installation to Automation &#8211; Learn Linux TV</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel="alternate" type="application/rss+xml" title="Learn Linux TV &raquo; Feed" href="https://www.learnlinux.tv/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Learn Linux TV &raquo; Comments Feed" href="https://www.learnlinux.tv/comments/feed/" />
+<script>
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/15.0.3\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/15.0.3\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/www.learnlinux.tv\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.5.5"}};
+/*! This file is auto-generated */
+!function(i,n){var o,s,e;function c(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function p(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data),r=(e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0),new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data));return t.every(function(e,t){return e===r[t]})}function u(e,t,n){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\uddfa\ud83c\uddf3","\ud83c\uddfa\u200b\ud83c\uddf3")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!n(e,"\ud83d\udc26\u200d\u2b1b","\ud83d\udc26\u200b\u2b1b")}return!1}function f(e,t,n){var r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):i.createElement("canvas"),a=r.getContext("2d",{willReadFrequently:!0}),o=(a.textBaseline="top",a.font="600 32px Arial",{});return e.forEach(function(e){o[e]=t(a,e,n)}),o}function t(e){var t=i.createElement("script");t.src=e,t.defer=!0,i.head.appendChild(t)}"undefined"!=typeof Promise&&(o="wpEmojiSettingsSupports",s=["flag","emoji"],n.supports={everything:!0,everythingExceptFlag:!0},e=new Promise(function(e){i.addEventListener("DOMContentLoaded",e,{once:!0})}),new Promise(function(t){var n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),p.toString()].join(",")+"));",r=new Blob([e],{type:"text/javascript"}),a=new Worker(URL.createObjectURL(r),{name:"wpTestEmojiSupports"});return void(a.onmessage=function(e){c(n=e.data),a.terminate(),t(n)})}catch(e){}c(n=f(s,u,p))}t(n)}).then(function(e){for(var t in e)n.supports[t]=e[t],n.supports.everything=n.supports.everything&&n.supports[t],"flag"!==t&&(n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&n.supports[t]);n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&!n.supports.flag,n.DOMReady=!1,n.readyCallback=function(){n.DOMReady=!0}}).then(function(){return e}).then(function(){var e;n.supports.everything||(n.readyCallback(),(e=n.source||{}).concatemoji?t(e.concatemoji):e.wpemoji&&e.twemoji&&(t(e.twemoji),t(e.wpemoji)))}))}((window,document),window._wpemojiSettings);
+</script>
+<style id='wp-emoji-styles-inline-css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+</style>
+<link rel='stylesheet' id='wp-block-library-css' href='https://www.learnlinux.tv/wp-includes/css/dist/block-library/style.min.css?ver=6.5.5' media='all' />
+<style id='classic-theme-styles-inline-css'>
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+</style>
+<style id='global-styles-inline-css'>
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}body .is-layout-grid{display: grid;}body .is-layout-grid > *{margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+.wp-block-navigation a:where(:not(.wp-element-button)){color: inherit;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+.wp-block-pullquote{font-size: 1.5em;line-height: 1.6;}
+</style>
+<link rel='stylesheet' id='hello-elementor-css' href='https://www.learnlinux.tv/wp-content/themes/hello-elementor/style.min.css?ver=3.1.0' media='all' />
+<link rel='stylesheet' id='hello-elementor-theme-style-css' href='https://www.learnlinux.tv/wp-content/themes/hello-elementor/theme.min.css?ver=3.1.0' media='all' />
+<link rel='stylesheet' id='hello-elementor-header-footer-css' href='https://www.learnlinux.tv/wp-content/themes/hello-elementor/header-footer.min.css?ver=3.1.0' media='all' />
+<link rel='stylesheet' id='elementor-frontend-css' href='https://www.learnlinux.tv/wp-content/plugins/elementor/assets/css/frontend-lite.min.css?ver=3.22.3' media='all' />
+<link rel='stylesheet' id='elementor-post-2897-css' href='https://www.learnlinux.tv/wp-content/uploads/elementor/css/post-2897.css?ver=1719417457' media='all' />
+<link rel='stylesheet' id='swiper-css' href='https://www.learnlinux.tv/wp-content/plugins/elementor/assets/lib/swiper/v8/css/swiper.min.css?ver=8.4.5' media='all' />
+<link rel='stylesheet' id='elementor-pro-css' href='https://www.learnlinux.tv/wp-content/plugins/elementor-pro/assets/css/frontend-lite.min.css?ver=3.22.1' media='all' />
+<link rel='stylesheet' id='elementor-post-2909-css' href='https://www.learnlinux.tv/wp-content/uploads/elementor/css/post-2909.css?ver=1719417458' media='all' />
+<link rel='stylesheet' id='elementor-post-3104-css' href='https://www.learnlinux.tv/wp-content/uploads/elementor/css/post-3104.css?ver=1719417458' media='all' />
+<link rel='stylesheet' id='elementor-post-2991-css' href='https://www.learnlinux.tv/wp-content/uploads/elementor/css/post-2991.css?ver=1719417458' media='all' />
+<link rel='stylesheet' id='__EPYT__style-css' href='https://www.learnlinux.tv/wp-content/plugins/youtube-embed-plus/styles/ytprefs.min.css?ver=14.2.1.2' media='all' />
+<style id='__EPYT__style-inline-css'>
+
+                .epyt-gallery-thumb {
+                        width: 33.333%;
+                }
+                
+</style>
+<link rel='stylesheet' id='google-fonts-1-css' href='https://fonts.googleapis.com/css?family=Roboto%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CRoboto+Slab%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic&#038;display=swap&#038;ver=6.5.5' media='all' />
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><script src="https://www.learnlinux.tv/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
+<script src="https://www.learnlinux.tv/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
+<script id="__ytprefs__-js-extra">
+var _EPYT_ = {"ajaxurl":"https:\/\/www.learnlinux.tv\/wp-admin\/admin-ajax.php","security":"a9d84a9311","gallery_scrolloffset":"20","eppathtoscripts":"https:\/\/www.learnlinux.tv\/wp-content\/plugins\/youtube-embed-plus\/scripts\/","eppath":"https:\/\/www.learnlinux.tv\/wp-content\/plugins\/youtube-embed-plus\/","epresponsiveselector":"[\"iframe.__youtube_prefs_widget__\"]","epdovol":"1","version":"14.2.1.2","evselector":"iframe.__youtube_prefs__[src], iframe[src*=\"youtube.com\/embed\/\"], iframe[src*=\"youtube-nocookie.com\/embed\/\"]","ajax_compat":"","maxres_facade":"eager","ytapi_load":"light","pause_others":"","stopMobileBuffer":"1","facade_mode":"1","not_live_on_channel":"","vi_active":"","vi_js_posttypes":[]};
+</script>
+<script src="https://www.learnlinux.tv/wp-content/plugins/youtube-embed-plus/scripts/ytprefs.min.js?ver=14.2.1.2" id="__ytprefs__-js"></script>
+<link rel="https://api.w.org/" href="https://www.learnlinux.tv/wp-json/" /><link rel="alternate" type="application/json" href="https://www.learnlinux.tv/wp-json/wp/v2/posts/4065" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.learnlinux.tv/xmlrpc.php?rsd" />
+<link rel="canonical" href="https://www.learnlinux.tv/complete-ansible-semaphore-tutorial-from-installation-to-automation/" />
+<link rel='shortlink' href='https://www.learnlinux.tv/?p=4065' />
+<link rel="alternate" type="application/json+oembed" href="https://www.learnlinux.tv/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.learnlinux.tv%2Fcomplete-ansible-semaphore-tutorial-from-installation-to-automation%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://www.learnlinux.tv/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.learnlinux.tv%2Fcomplete-ansible-semaphore-tutorial-from-installation-to-automation%2F&#038;format=xml" />
+<meta name="description" content="Do you want to make server deployment easier? Consider Ansible Semaphore: An awesome project that provides a full GUI experience around Ansible, enabling you to take your automation game to the next level. In this video, Jay will show you how to install Ansible Semaphore, set it up, and more!">
+<meta name="generator" content="Elementor 3.22.3; features: e_optimized_assets_loading, e_optimized_css_loading, e_font_icon_svg, additional_custom_breakpoints; settings: css_print_method-external, google_font-enabled, font_display-swap">
+<link rel="icon" href="https://www.learnlinux.tv/wp-content/uploads/2020/12/cropped-icon_green-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://www.learnlinux.tv/wp-content/uploads/2020/12/cropped-icon_green-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://www.learnlinux.tv/wp-content/uploads/2020/12/cropped-icon_green-180x180.png" />
+<meta name="msapplication-TileImage" content="https://www.learnlinux.tv/wp-content/uploads/2020/12/cropped-icon_green-270x270.png" />
+</head>
+<body class="post-template-default single single-post postid-4065 single-format-standard wp-custom-logo elementor-default elementor-kit-2897 elementor-page-2991">
+
+
+<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<div data-elementor-type="header" data-elementor-id="2909" class="elementor elementor-2909 elementor-location-header" data-elementor-post-type="elementor_library">
+			<div class="elementor-element elementor-element-f3ab7b4 e-con-full e-flex e-con e-parent" data-id="f3ab7b4" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+				<div class="elementor-element elementor-element-84599a7 elementor-widget elementor-widget-theme-site-logo elementor-widget-image" data-id="84599a7" data-element_type="widget" data-widget_type="theme-site-logo.default">
+				<div class="elementor-widget-container">
+			<style>/*! elementor - v3.22.0 - 26-06-2024 */
+.elementor-widget-image{text-align:center}.elementor-widget-image a{display:inline-block}.elementor-widget-image a img[src$=".svg"]{width:48px}.elementor-widget-image img{vertical-align:middle;display:inline-block}</style>						<a href="https://www.learnlinux.tv">
+			<img src="https://www.learnlinux.tv/wp-content/uploads/elementor/thumbs/site_logo-1-q8fzfaiory1mhfqkbz74p9ci6ap3mjztjlggf4vnh0.png" title="site_logo" alt="site_logo" loading="lazy" />				</a>
+									</div>
+				</div>
+		<div class="elementor-element elementor-element-c4d344a e-con-full e-flex e-con e-child" data-id="c4d344a" data-element_type="container">
+				<div class="elementor-element elementor-element-1082d9b elementor-shape-rounded elementor-grid-0 e-grid-align-center elementor-widget elementor-widget-global elementor-global-3515 elementor-widget-social-icons" data-id="1082d9b" data-element_type="widget" data-widget_type="social-icons.default">
+				<div class="elementor-widget-container">
+			<style>/*! elementor - v3.22.0 - 26-06-2024 */
+.elementor-widget-social-icons.elementor-grid-0 .elementor-widget-container,.elementor-widget-social-icons.elementor-grid-mobile-0 .elementor-widget-container,.elementor-widget-social-icons.elementor-grid-tablet-0 .elementor-widget-container{line-height:1;font-size:0}.elementor-widget-social-icons:not(.elementor-grid-0):not(.elementor-grid-tablet-0):not(.elementor-grid-mobile-0) .elementor-grid{display:inline-grid}.elementor-widget-social-icons .elementor-grid{grid-column-gap:var(--grid-column-gap,5px);grid-row-gap:var(--grid-row-gap,5px);grid-template-columns:var(--grid-template-columns);justify-content:var(--justify-content,center);justify-items:var(--justify-content,center)}.elementor-icon.elementor-social-icon{font-size:var(--icon-size,25px);line-height:var(--icon-size,25px);width:calc(var(--icon-size, 25px) + 2 * var(--icon-padding, .5em));height:calc(var(--icon-size, 25px) + 2 * var(--icon-padding, .5em))}.elementor-social-icon{--e-social-icon-icon-color:#fff;display:inline-flex;background-color:#69727d;align-items:center;justify-content:center;text-align:center;cursor:pointer}.elementor-social-icon i{color:var(--e-social-icon-icon-color)}.elementor-social-icon svg{fill:var(--e-social-icon-icon-color)}.elementor-social-icon:last-child{margin:0}.elementor-social-icon:hover{opacity:.9;color:#fff}.elementor-social-icon-android{background-color:#a4c639}.elementor-social-icon-apple{background-color:#999}.elementor-social-icon-behance{background-color:#1769ff}.elementor-social-icon-bitbucket{background-color:#205081}.elementor-social-icon-codepen{background-color:#000}.elementor-social-icon-delicious{background-color:#39f}.elementor-social-icon-deviantart{background-color:#05cc47}.elementor-social-icon-digg{background-color:#005be2}.elementor-social-icon-dribbble{background-color:#ea4c89}.elementor-social-icon-elementor{background-color:#d30c5c}.elementor-social-icon-envelope{background-color:#ea4335}.elementor-social-icon-facebook,.elementor-social-icon-facebook-f{background-color:#3b5998}.elementor-social-icon-flickr{background-color:#0063dc}.elementor-social-icon-foursquare{background-color:#2d5be3}.elementor-social-icon-free-code-camp,.elementor-social-icon-freecodecamp{background-color:#006400}.elementor-social-icon-github{background-color:#333}.elementor-social-icon-gitlab{background-color:#e24329}.elementor-social-icon-globe{background-color:#69727d}.elementor-social-icon-google-plus,.elementor-social-icon-google-plus-g{background-color:#dd4b39}.elementor-social-icon-houzz{background-color:#7ac142}.elementor-social-icon-instagram{background-color:#262626}.elementor-social-icon-jsfiddle{background-color:#487aa2}.elementor-social-icon-link{background-color:#818a91}.elementor-social-icon-linkedin,.elementor-social-icon-linkedin-in{background-color:#0077b5}.elementor-social-icon-medium{background-color:#00ab6b}.elementor-social-icon-meetup{background-color:#ec1c40}.elementor-social-icon-mixcloud{background-color:#273a4b}.elementor-social-icon-odnoklassniki{background-color:#f4731c}.elementor-social-icon-pinterest{background-color:#bd081c}.elementor-social-icon-product-hunt{background-color:#da552f}.elementor-social-icon-reddit{background-color:#ff4500}.elementor-social-icon-rss{background-color:#f26522}.elementor-social-icon-shopping-cart{background-color:#4caf50}.elementor-social-icon-skype{background-color:#00aff0}.elementor-social-icon-slideshare{background-color:#0077b5}.elementor-social-icon-snapchat{background-color:#fffc00}.elementor-social-icon-soundcloud{background-color:#f80}.elementor-social-icon-spotify{background-color:#2ebd59}.elementor-social-icon-stack-overflow{background-color:#fe7a15}.elementor-social-icon-steam{background-color:#00adee}.elementor-social-icon-stumbleupon{background-color:#eb4924}.elementor-social-icon-telegram{background-color:#2ca5e0}.elementor-social-icon-threads{background-color:#000}.elementor-social-icon-thumb-tack{background-color:#1aa1d8}.elementor-social-icon-tripadvisor{background-color:#589442}.elementor-social-icon-tumblr{background-color:#35465c}.elementor-social-icon-twitch{background-color:#6441a5}.elementor-social-icon-twitter{background-color:#1da1f2}.elementor-social-icon-viber{background-color:#665cac}.elementor-social-icon-vimeo{background-color:#1ab7ea}.elementor-social-icon-vk{background-color:#45668e}.elementor-social-icon-weibo{background-color:#dd2430}.elementor-social-icon-weixin{background-color:#31a918}.elementor-social-icon-whatsapp{background-color:#25d366}.elementor-social-icon-wordpress{background-color:#21759b}.elementor-social-icon-x-twitter{background-color:#000}.elementor-social-icon-xing{background-color:#026466}.elementor-social-icon-yelp{background-color:#af0606}.elementor-social-icon-youtube{background-color:#cd201f}.elementor-social-icon-500px{background-color:#0099e5}.elementor-shape-rounded .elementor-icon.elementor-social-icon{border-radius:10%}.elementor-shape-circle .elementor-icon.elementor-social-icon{border-radius:50%}</style>		<div class="elementor-social-icons-wrapper elementor-grid">
+							<span class="elementor-grid-item">
+					<a class="elementor-icon elementor-social-icon elementor-social-icon-youtube elementor-repeater-item-5d6e716" href="https://www.youtube.com/@LearnLinuxTV" target="_blank">
+						<span class="elementor-screen-only">Youtube</span>
+						<svg class="e-font-icon-svg e-fab-youtube" viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg"><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"></path></svg>					</a>
+				</span>
+							<span class="elementor-grid-item">
+					<a class="elementor-icon elementor-social-icon elementor-social-icon-twitter elementor-repeater-item-7c076e3" href="https://twitter.com/JayTheLinuxGuy" target="_blank">
+						<span class="elementor-screen-only">Twitter</span>
+						<svg class="e-font-icon-svg e-fab-twitter" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"></path></svg>					</a>
+				</span>
+							<span class="elementor-grid-item">
+					<a class="elementor-icon elementor-social-icon elementor-social-icon-linkedin elementor-repeater-item-1cffb50" href="https://www.linkedin.com/company/learnlinuxtv" target="_blank">
+						<span class="elementor-screen-only">Linkedin</span>
+						<svg class="e-font-icon-svg e-fab-linkedin" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"></path></svg>					</a>
+				</span>
+					</div>
+				</div>
+				</div>
+				</div>
+				</div>
+		<div class="elementor-element elementor-element-7acc963 e-con-full e-flex e-con e-parent" data-id="7acc963" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;slideshow&quot;,&quot;background_slideshow_gallery&quot;:[],&quot;background_slideshow_loop&quot;:&quot;yes&quot;,&quot;background_slideshow_slide_duration&quot;:5000,&quot;background_slideshow_slide_transition&quot;:&quot;fade&quot;,&quot;background_slideshow_transition_duration&quot;:500}">
+		<div class="elementor-element elementor-element-e1d5c7d e-con-full e-flex e-con e-child" data-id="e1d5c7d" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+				<div class="elementor-element elementor-element-501558a elementor-search-form--icon-arrow elementor-widget__width-initial elementor-search-form--skin-classic elementor-search-form--button-type-icon elementor-widget elementor-widget-search-form" data-id="501558a" data-element_type="widget" data-settings="{&quot;skin&quot;:&quot;classic&quot;}" data-widget_type="search-form.default">
+				<div class="elementor-widget-container">
+			<link rel="stylesheet" href="https://www.learnlinux.tv/wp-content/plugins/elementor-pro/assets/css/widget-theme-elements.min.css">		<search role="search">
+			<form class="elementor-search-form" action="https://www.learnlinux.tv" method="get">
+												<div class="elementor-search-form__container">
+					<label class="elementor-screen-only" for="elementor-search-form-501558a">Search</label>
+
+					
+					<input id="elementor-search-form-501558a" placeholder="Search..." class="elementor-search-form__input" type="search" name="s" value="">
+					
+											<button class="elementor-search-form__submit" type="submit" aria-label="Search">
+															<div class="e-font-icon-svg-container"><svg class="fa fa-arrow-right e-font-icon-svg e-fas-arrow-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg></div>								<span class="elementor-screen-only">Search</span>
+													</button>
+					
+									</div>
+			</form>
+		</search>
+				</div>
+				</div>
+				<div class="elementor-element elementor-element-f977f9a elementor-nav-menu__align-start elementor-nav-menu--dropdown-tablet elementor-nav-menu__text-align-aside elementor-nav-menu--toggle elementor-nav-menu--burger elementor-widget elementor-widget-nav-menu" data-id="f977f9a" data-element_type="widget" data-settings="{&quot;submenu_icon&quot;:{&quot;value&quot;:&quot;&lt;i class=\&quot;\&quot;&gt;&lt;\/i&gt;&quot;,&quot;library&quot;:&quot;&quot;},&quot;layout&quot;:&quot;horizontal&quot;,&quot;toggle&quot;:&quot;burger&quot;}" data-widget_type="nav-menu.default">
+				<div class="elementor-widget-container">
+			<link rel="stylesheet" href="https://www.learnlinux.tv/wp-content/plugins/elementor-pro/assets/css/widget-nav-menu.min.css">			<nav class="elementor-nav-menu--main elementor-nav-menu__container elementor-nav-menu--layout-horizontal e--pointer-background e--animation-fade">
+				<ul id="menu-1-f977f9a" class="elementor-nav-menu"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-3821"><a href="https://www.learnlinux.tv" class="elementor-item">Latest Linux Content</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-291"><a href="https://www.learnlinux.tv/tutorial-series/" class="elementor-item">Courses</a>
+<ul class="sub-menu elementor-nav-menu--dropdown">
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3438"><a href="https://www.learnlinux.tv/linux-essentials/" class="elementor-sub-item">Linux Crash Course</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4079"><a href="https://www.learnlinux.tv/linux-essentials-course/" class="elementor-sub-item">Linux Essentials: The Complete Certification Workshop</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-310"><a href="https://www.learnlinux.tv/vim-text-editor-for-beginners/" class="elementor-sub-item">Vim Text Editor for Beginners</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-313"><a href="https://www.learnlinux.tv/getting-started-with-tmux/" class="elementor-sub-item">Getting Started with Tmux</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2432"><a href="https://www.learnlinux.tv/openstack-administration-guide/" class="elementor-sub-item">OpenStack Administration Guide</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2068"><a href="https://www.learnlinux.tv/bash-scripting-essentials/" class="elementor-sub-item">Bash Scripting on Linux</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1500"><a href="https://www.learnlinux.tv/proxmox-full-course/" class="elementor-sub-item">Proxmox Virtual Environment Full Course</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-990"><a href="https://www.learnlinux.tv/docker-essentials/" class="elementor-sub-item">Docker Essentials</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-457"><a href="https://www.learnlinux.tv/getting-started-with-ansible/" class="elementor-sub-item">Getting Started with Ansible: Automation Made Easy</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-2479"><a target="_blank" rel="noopener" href="https://merch.learnlinux.tv" class="elementor-item">Shop</a>
+<ul class="sub-menu elementor-nav-menu--dropdown">
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-23"><a href="https://www.learnlinux.tv/books/" class="elementor-sub-item">Books</a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3752"><a href="https://merch.learnlinux.tv" class="elementor-sub-item">Linux Merch</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-572"><a href="https://community.learnlinux.tv/" class="elementor-item">Community</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3646"><a href="https://support.learnlinux.tv/" class="elementor-item">Support LLTV</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-668"><a href="https://www.learnlinux.tv/request-assistance/" class="elementor-item">Request Assistance</a></li>
+</ul>			</nav>
+					<div class="elementor-menu-toggle" role="button" tabindex="0" aria-label="Menu Toggle" aria-expanded="false">
+			<svg aria-hidden="true" role="presentation" class="elementor-menu-toggle__icon--open e-font-icon-svg e-eicon-menu-bar" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d="M104 333H896C929 333 958 304 958 271S929 208 896 208H104C71 208 42 237 42 271S71 333 104 333ZM104 583H896C929 583 958 554 958 521S929 458 896 458H104C71 458 42 487 42 521S71 583 104 583ZM104 833H896C929 833 958 804 958 771S929 708 896 708H104C71 708 42 737 42 771S71 833 104 833Z"></path></svg><svg aria-hidden="true" role="presentation" class="elementor-menu-toggle__icon--close e-font-icon-svg e-eicon-close" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d="M742 167L500 408 258 167C246 154 233 150 217 150 196 150 179 158 167 167 154 179 150 196 150 212 150 229 154 242 171 254L408 500 167 742C138 771 138 800 167 829 196 858 225 858 254 829L496 587 738 829C750 842 767 846 783 846 800 846 817 842 829 829 842 817 846 804 846 783 846 767 842 750 829 737L588 500 833 258C863 229 863 200 833 171 804 137 775 137 742 167Z"></path></svg>			<span class="elementor-screen-only">Menu</span>
+		</div>
+					<nav class="elementor-nav-menu--dropdown elementor-nav-menu__container" aria-hidden="true">
+				<ul id="menu-2-f977f9a" class="elementor-nav-menu"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-3821"><a href="https://www.learnlinux.tv" class="elementor-item" tabindex="-1">Latest Linux Content</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-291"><a href="https://www.learnlinux.tv/tutorial-series/" class="elementor-item" tabindex="-1">Courses</a>
+<ul class="sub-menu elementor-nav-menu--dropdown">
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3438"><a href="https://www.learnlinux.tv/linux-essentials/" class="elementor-sub-item" tabindex="-1">Linux Crash Course</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4079"><a href="https://www.learnlinux.tv/linux-essentials-course/" class="elementor-sub-item" tabindex="-1">Linux Essentials: The Complete Certification Workshop</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-310"><a href="https://www.learnlinux.tv/vim-text-editor-for-beginners/" class="elementor-sub-item" tabindex="-1">Vim Text Editor for Beginners</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-313"><a href="https://www.learnlinux.tv/getting-started-with-tmux/" class="elementor-sub-item" tabindex="-1">Getting Started with Tmux</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2432"><a href="https://www.learnlinux.tv/openstack-administration-guide/" class="elementor-sub-item" tabindex="-1">OpenStack Administration Guide</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2068"><a href="https://www.learnlinux.tv/bash-scripting-essentials/" class="elementor-sub-item" tabindex="-1">Bash Scripting on Linux</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1500"><a href="https://www.learnlinux.tv/proxmox-full-course/" class="elementor-sub-item" tabindex="-1">Proxmox Virtual Environment Full Course</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-990"><a href="https://www.learnlinux.tv/docker-essentials/" class="elementor-sub-item" tabindex="-1">Docker Essentials</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-457"><a href="https://www.learnlinux.tv/getting-started-with-ansible/" class="elementor-sub-item" tabindex="-1">Getting Started with Ansible: Automation Made Easy</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-2479"><a target="_blank" rel="noopener" href="https://merch.learnlinux.tv" class="elementor-item" tabindex="-1">Shop</a>
+<ul class="sub-menu elementor-nav-menu--dropdown">
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-23"><a href="https://www.learnlinux.tv/books/" class="elementor-sub-item" tabindex="-1">Books</a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3752"><a href="https://merch.learnlinux.tv" class="elementor-sub-item" tabindex="-1">Linux Merch</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-572"><a href="https://community.learnlinux.tv/" class="elementor-item" tabindex="-1">Community</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3646"><a href="https://support.learnlinux.tv/" class="elementor-item" tabindex="-1">Support LLTV</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-668"><a href="https://www.learnlinux.tv/request-assistance/" class="elementor-item" tabindex="-1">Request Assistance</a></li>
+</ul>			</nav>
+				</div>
+				</div>
+				</div>
+				</div>
+				</div>
+				<div data-elementor-type="single-post" data-elementor-id="2991" class="elementor elementor-2991 elementor-location-single post-4065 post type-post status-publish format-standard hentry category-ansible category-tutorials category-youtube-videos tag-ansible-semaphore tag-semaphore" data-elementor-post-type="elementor_library">
+			<div class="elementor-element elementor-element-647a23b e-flex e-con-boxed e-con e-parent" data-id="647a23b" data-element_type="container">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-a2aee87 e-con-full e-flex e-con e-child" data-id="a2aee87" data-element_type="container">
+		<div class="elementor-element elementor-element-c6002aa e-con-full e-flex e-con e-child" data-id="c6002aa" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+				<div class="elementor-element elementor-element-980dc22 elementor-widget elementor-widget-theme-post-title elementor-page-title elementor-widget-heading" data-id="980dc22" data-element_type="widget" data-widget_type="theme-post-title.default">
+				<div class="elementor-widget-container">
+			<style>/*! elementor - v3.22.0 - 26-06-2024 */
+.elementor-heading-title{padding:0;margin:0;line-height:1}.elementor-widget-heading .elementor-heading-title[class*=elementor-size-]>a{color:inherit;font-size:inherit;line-height:inherit}.elementor-widget-heading .elementor-heading-title.elementor-size-small{font-size:15px}.elementor-widget-heading .elementor-heading-title.elementor-size-medium{font-size:19px}.elementor-widget-heading .elementor-heading-title.elementor-size-large{font-size:29px}.elementor-widget-heading .elementor-heading-title.elementor-size-xl{font-size:39px}.elementor-widget-heading .elementor-heading-title.elementor-size-xxl{font-size:59px}</style><h2 class="elementor-heading-title elementor-size-default">Complete Ansible Semaphore Tutorial: From Installation to Automation</h2>		</div>
+				</div>
+				<div class="elementor-element elementor-element-bd4af17 elementor-widget elementor-widget-theme-post-content" data-id="bd4af17" data-element_type="widget" data-widget_type="theme-post-content.default">
+				<div class="elementor-widget-container">
+			
+<p><a href="https://www.semui.co" data-type="link" data-id="https://youtu.be/CltoVfeRdoM" target="_blank" rel="noreferrer noopener">Semaphore</a> is very easy to set up and use, and can be a great asset to those of you that are currently using <a href="https://www.learnlinux.tv/getting-started-with-ansible/" data-type="page" data-id="452">Ansible</a>. And even if you&#8217;re not an Ansible user, you might become one if you spend time with Semaphore. Ansible is the leading configuration management solution, and Semaphore makes Ansible easier than it already was.</p>
+
+
+
+<p>Also, <a href="https://youtu.be/CltoVfeRdoM" data-type="link" data-id="https://youtu.be/CltoVfeRdoM" target="_blank" rel="noreferrer noopener">Semaphore</a> is free, so you can set it up right now if you want to, with no sales reps or company&#8217;s to deal with. It&#8217;s an open source application written in Go, so you can skip all the red tape and get it deployed.</p>
+
+
+
+<p>So in this video, what I&#8217;ll do is show you the process of installing Semaphore, and then I&#8217;ll show you around the UI. After that, I&#8217;ll give you an example playbook you can run.</p>
+
+
+<div  id="_ytid_38070"  width="800" height="450"  data-origwidth="800" data-origheight="450" data-facadesrc="https://www.youtube.com/embed/CltoVfeRdoM?enablejsapi=1&autoplay=0&cc_load_policy=0&cc_lang_pref=&iv_load_policy=1&loop=0&modestbranding=1&rel=0&fs=1&playsinline=0&autohide=2&theme=dark&color=red&controls=1&" class="__youtube_prefs__ epyt-facade no-lazyload" data-epautoplay="1" ><img decoding="async" data-spai-excluded="true" class="epyt-facade-poster skip-lazy" loading="lazy"  alt="YouTube player"  src="https://i.ytimg.com/vi/CltoVfeRdoM/maxresdefault.jpg"  /><button class="epyt-facade-play" aria-label="Play"><svg data-no-lazy="1" height="100%" version="1.1" viewBox="0 0 68 48" width="100%"><path class="ytp-large-play-button-bg" d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg></button></div>
+
+
+
+<p>If you want to follow along with me, then I recommend two VMs. The first will be used for Semaphore itself, and will act as our Semaphore server. The second VM will be used as an example server we want to configure with Semaphore.</p>
+
+
+
+<p>Now, let&#8217;s get started and dive in to Semaphore!</p>
+
+
+
+<span id="more-4065"></span>
+
+
+
+<h2 class="wp-block-heading">Setting up a Semaphore User</h2>
+
+
+
+<p><em>Note: Debian 12 was used to test all the commands used in the video and this article. If you use a different version of Debian or another distro entirely, these steps may not work the same way.</em></p>
+
+
+
+<p>It&#8217;s better to have Semaphore run as its own user, rather than as <code>root</code>. To set that up, let&#8217;s create that user:</p>
+
+
+
+<pre class="wp-block-code"><code>sudo adduser --system --group --home /home/semaphore semaphore</code></pre>
+
+
+
+<h2 class="wp-block-heading">Building the Database</h2>
+
+
+
+<p>For this build, we&#8217;ll use <a href="https://mariadb.org" data-type="link" data-id="https://mariadb.org" target="_blank" rel="noreferrer noopener">MariaDB</a> to provide our database layer. To install it, we&#8217;ll install the <code>mariadb-server</code> package:</p>
+
+
+
+<pre class="wp-block-code"><code>sudo apt install mariadb-server</code></pre>
+
+
+
+<p>Next, we&#8217;ll run the <code>mysql_secure_installation</code> command. This command doesn&#8217;t actually make our database server secure though, but it does provide a bit of minimum security so at least that&#8217;s something.</p>
+
+
+
+<pre class="wp-block-code"><code>sudo mysql_secure_installation</code></pre>
+
+
+
+<p>Now that we&#8217;ve done that, we&#8217;ll need to access the MariaDB shell in order to set up the database that we&#8217;ll use for Semaphore. One quick method of accessing the MariaDB shell is to run the following command:</p>
+
+
+
+<pre class="wp-block-code"><code>sudo mariadb</code></pre>
+
+
+
+<p>Once inside the MariaDB shell, we can use it to create the <code>semaphore_db</code> database:</p>
+
+
+
+<pre class="wp-block-code"><code>CREATE DATABASE semaphore_db;</code></pre>
+
+
+
+<p>Now that we&#8217;ve created the database, we&#8217;ll need to create a MariaDB user that Semaphore will use to access its database:</p>
+
+
+
+<pre class="wp-block-code"><code>GRANT ALL PRIVILEGES ON semaphore_db.* TO semaphore_user@localhost IDENTIFIED BY 'randomly_generated_password_here';</code></pre>
+
+
+
+<p>Then, we&#8217;ll exit the MariaDB shell:</p>
+
+
+
+<pre class="wp-block-code"><code>exit
+
+</code></pre>
+
+
+
+<h2 class="wp-block-heading">Install Semaphore</h2>
+
+
+
+<p>To install Semaphore, first visit the project&#8217;s <a href="https://github.com/ansible-semaphore/semaphore/releases/latest" data-type="link" data-id="https://github.com/ansible-semaphore/semaphore/releases/latest" target="_blank" rel="noreferrer noopener">releases page</a>. Once you find the latest version, copy the URL for its download link. We can use that URL on the server to download Semaphore:</p>
+
+
+
+<p>Copy deb file address to create URL:</p>
+
+
+
+<pre class="wp-block-code"><code>wget https://github.com/ansible-semaphore/semaphore/releases/download/v&lt;VERSION>/semaphore_&lt;VERSION>_linux_amd64.deb</code></pre>
+
+
+
+<p><em>Note: You must replace the above URL with a correct URL from the releases page.</em></p>
+
+
+
+<p>Once downloaded, you can install Semaphore with <code>apt</code>:</p>
+
+
+
+<pre class="wp-block-code"><code>sudo dpkg -i semaphore*.deb</code></pre>
+
+
+
+<p>Once installed, we&#8217;ll use the <code>semaphore</code> command to create Semaphore&#8217;s initial config file:</p>
+
+
+
+<pre class="wp-block-code"><code>semaphore setup</code></pre>
+
+
+
+<p>To test Semaphore by running it in-place as our local user, we can run:</p>
+
+
+
+<pre class="wp-block-code"><code>semaphore server --config config.json</code></pre>
+
+
+
+<p>Once the web server is running, we can access Semaphore by visiting <code>http://ip-address:3000</code> in our browser.</p>
+
+
+
+<p>Once we&#8217;ve verified the config file works, we can move it to a more appropriate place:</p>
+
+
+
+<pre class="wp-block-code"><code>sudo mkdir /etc/semaphore</code></pre>
+
+
+
+<pre class="wp-block-code"><code>sudo mv config.json /etc/semaphore/</code></pre>
+
+
+
+<pre class="wp-block-code"><code>sudo chown -R semaphore:semaphore /etc/semaphore</code></pre>
+
+
+
+<h2 class="wp-block-heading">Creating a Systemd service</h2>
+
+
+
+<p>Creating a <a href="https://www.learnlinux.tv/systemd-deep-dive-a-complete-easy-to-understand-guide-for-everyone/" data-type="post" data-id="2697" target="_blank" rel="noreferrer noopener">Systemd</a> service will faciliate setting up Semaphore to run each time the server itself restarts. To create a Systemd service file for Semaphore, we will run the following command:</p>
+
+
+
+<pre class="wp-block-code"><code>sudo nano /etc/systemd/system/semaphore.service</code></pre>
+
+
+
+<p>Inside that file, we&#8217;ll add the following:</p>
+
+
+
+<pre class="wp-block-code"><code>&#091;Unit]
+Description=Ansible Semaphore
+Documentation=https://docs.ansible-semaphore.com/
+Wants=network-online.target
+After=network-online.target
+ConditionPathExists=/usr/bin/semaphore
+ConditionPathExists=/etc/semaphore/config.json
+
+&#091;Service]
+ExecStart=/usr/bin/semaphore server --config /etc/semaphore/config.json
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=10s
+User=semaphore
+Group=semaphore
+
+&#091;Install]
+WantedBy=multi-user.target</code></pre>
+
+
+
+<p>Next, we&#8217;ll reload Systemd:</p>
+
+
+
+<pre class="wp-block-code"><code>sudo systemctl daemon-reload</code></pre>
+
+
+
+<p>And then we&#8217;ll enable Semaphore:</p>
+
+
+
+<pre class="wp-block-code"><code>sudo systemctl enable semaphore.service</code></pre>
+
+
+
+<p>And to start Semaphore, we&#8217;ll run the following command:</p>
+
+
+
+<pre class="wp-block-code"><code>sudo systemctl start semaphore.service</code></pre>
+
+
+
+<h2 class="wp-block-heading">Playbook Repository</h2>
+
+
+
+<p>In order for us to continue with this example, you&#8217;ll need a Git repository with the following <code>local.yml</code> file inside:</p>
+
+
+
+<pre class="wp-block-code"><code>---
+- hosts: my_servers
+  become: true
+  tasks:
+    - name: Print OS info
+      ansible.builtin.package:
+        name: apache2</code></pre>
+
+
+
+<h2 class="wp-block-heading">Configure Semaphore</h2>
+
+
+
+<p>The following code is used to create an environment within Semaphore:</p>
+
+
+
+<p>create environment</p>
+
+
+
+<pre class="wp-block-code"><code>{
+  "var_environment": "production"
+}</code></pre>
+
+
+
+<p>In order to ensure Semaphore can run commands properly, we&#8217;ll need a line similar to the one below added to <code>/etc/sudoers.d/semaphore</code> on the target (the instance that our Semaphore server will be configuring). Be sure to replace <code>semaphore</code> in both the file name and inside the file to match the username of the user you intend to use with Semaphore.</p>
+
+
+
+<pre class="wp-block-code"><code>semaphore ALL=(ALL) NOPASSWD: ALL</code></pre>
+
+
+
+<h2 class="wp-block-heading">Other config files</h2>
+
+
+
+<p>The following format was used for the inventory file (be sure to change the information to match yours):</p>
+
+
+
+<pre class="wp-block-code"><code>&#091;all:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+&#091;web_servers]
+172.234.197.30</code></pre>
+		</div>
+				</div>
+				</div>
+				</div>
+		<div class="elementor-element elementor-element-5c5e5b8 e-con-full e-flex e-con e-child" data-id="5c5e5b8" data-element_type="container">
+		<div class="elementor-element elementor-element-b754709 e-flex e-con-boxed e-con e-child" data-id="b754709" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+					<div class="e-con-inner">
+				<div class="elementor-element elementor-element-890b41e elementor-widget elementor-widget-heading" data-id="890b41e" data-element_type="widget" data-widget_type="heading.default">
+				<div class="elementor-widget-container">
+			<h2 class="elementor-heading-title elementor-size-default">Brand-New Course!</h2>		</div>
+				</div>
+				<div class="elementor-element elementor-element-2712c43 elementor-widget elementor-widget-image" data-id="2712c43" data-element_type="widget" data-widget_type="image.default">
+				<div class="elementor-widget-container">
+														<a href="https://learnlinux.link/lpi-course" target="_blank">
+							<img src="https://www.learnlinux.tv/wp-content/uploads/elementor/thumbs/Essentials-Linux-qncklzjna5oz8nuzed3zm6sqqax9o8lq0jdehcd158.jpg" title="V2-Logos-angeglichen_14042020" alt="V2-Logos-angeglichen_14042020" loading="lazy" />								</a>
+													</div>
+				</div>
+				<div class="elementor-element elementor-element-c28a3de elementor-align-center elementor-widget elementor-widget-button" data-id="c28a3de" data-element_type="widget" data-widget_type="button.default">
+				<div class="elementor-widget-container">
+					<div class="elementor-button-wrapper">
+			<a class="elementor-button elementor-button-link elementor-size-sm" href="https://learnlinux.link/lpi-course" target="_blank">
+						<span class="elementor-button-content-wrapper">
+									<span class="elementor-button-text">Check out the Course</span>
+					</span>
+					</a>
+		</div>
+				</div>
+				</div>
+					</div>
+				</div>
+		<div class="elementor-element elementor-element-1198898 e-flex e-con-boxed e-con e-child" data-id="1198898" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+					<div class="e-con-inner">
+				<div class="elementor-element elementor-element-0017b69 elementor-widget elementor-widget-heading" data-id="0017b69" data-element_type="widget" data-widget_type="heading.default">
+				<div class="elementor-widget-container">
+			<h2 class="elementor-heading-title elementor-size-default">Discount Vouchers</h2>		</div>
+				</div>
+				<div class="elementor-element elementor-element-29e20a1 elementor-widget elementor-widget-html" data-id="29e20a1" data-element_type="widget" data-widget_type="html.default">
+				<div class="elementor-widget-container">
+			<a href="https://learnlinux.link/lpi-voucher" target="blank"><img src="https://www.learnlinux.tv/wp-content/uploads/2023/04/lpi_logo_color_reverse_small.png"></a><BR>
+Receive 5% off an <a href="https://learnlinux.link/lpi-voucher" target="blank">LPI exam voucher<a>!		</div>
+				</div>
+					</div>
+				</div>
+		<div class="elementor-element elementor-element-de0962c e-flex e-con-boxed e-con e-child" data-id="de0962c" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+					<div class="e-con-inner">
+				<div class="elementor-element elementor-element-c28341b elementor-widget elementor-widget-heading" data-id="c28341b" data-element_type="widget" data-widget_type="heading.default">
+				<div class="elementor-widget-container">
+			<h2 class="elementor-heading-title elementor-size-default">New Linux Swag!</h2>		</div>
+				</div>
+				<div class="elementor-element elementor-element-dae14f8 elementor-widget elementor-widget-image" data-id="dae14f8" data-element_type="widget" data-widget_type="image.default">
+				<div class="elementor-widget-container">
+														<a href="https://merch.learnlinux.tv" target="_blank">
+							<img src="https://www.learnlinux.tv/wp-content/uploads/elementor/thumbs/store_promo_1_small_2-qkviux88rw4fgl26lixar9cdcnnklfk2olqze9kdxe.png" title="store_promo_1_small_2" alt="store_promo_1_small_2" loading="lazy" />								</a>
+													</div>
+				</div>
+				<div class="elementor-element elementor-element-6adabff elementor-align-center elementor-widget elementor-widget-button" data-id="6adabff" data-element_type="widget" data-widget_type="button.default">
+				<div class="elementor-widget-container">
+					<div class="elementor-button-wrapper">
+			<a class="elementor-button elementor-button-link elementor-size-sm" href="https://merch.learnlinux.tv">
+						<span class="elementor-button-content-wrapper">
+									<span class="elementor-button-text">Visit the Shop</span>
+					</span>
+					</a>
+		</div>
+				</div>
+				</div>
+					</div>
+				</div>
+		<div class="elementor-element elementor-element-efc52b3 e-flex e-con-boxed e-con e-child" data-id="efc52b3" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+					<div class="e-con-inner">
+				<div class="elementor-element elementor-element-e301e7c elementor-widget elementor-widget-heading" data-id="e301e7c" data-element_type="widget" data-widget_type="heading.default">
+				<div class="elementor-widget-container">
+			<h2 class="elementor-heading-title elementor-size-default">Exclusive Member Features</h2>		</div>
+				</div>
+				<div class="elementor-element elementor-element-cd9ec05 elementor-widget elementor-widget-text-editor" data-id="cd9ec05" data-element_type="widget" data-widget_type="text-editor.default">
+				<div class="elementor-widget-container">
+			<style>/*! elementor - v3.22.0 - 26-06-2024 */
+.elementor-widget-text-editor.elementor-drop-cap-view-stacked .elementor-drop-cap{background-color:#69727d;color:#fff}.elementor-widget-text-editor.elementor-drop-cap-view-framed .elementor-drop-cap{color:#69727d;border:3px solid;background-color:transparent}.elementor-widget-text-editor:not(.elementor-drop-cap-view-default) .elementor-drop-cap{margin-top:8px}.elementor-widget-text-editor:not(.elementor-drop-cap-view-default) .elementor-drop-cap-letter{width:1em;height:1em}.elementor-widget-text-editor .elementor-drop-cap{float:left;text-align:center;line-height:1;font-size:50px}.elementor-widget-text-editor .elementor-drop-cap-letter{display:inline-block}</style>				<p>Support the channel and receive exclusive perks!</p>						</div>
+				</div>
+				<div class="elementor-element elementor-element-4251211 elementor-align-center elementor-widget elementor-widget-button" data-id="4251211" data-element_type="widget" data-widget_type="button.default">
+				<div class="elementor-widget-container">
+					<div class="elementor-button-wrapper">
+			<a class="elementor-button elementor-button-link elementor-size-sm" href="https://learnlinux.link/lpi-course" target="_blank">
+						<span class="elementor-button-content-wrapper">
+									<span class="elementor-button-text">Support LLTV on Patreon</span>
+					</span>
+					</a>
+		</div>
+				</div>
+				</div>
+				<div class="elementor-element elementor-element-935188f elementor-align-center elementor-widget elementor-widget-button" data-id="935188f" data-element_type="widget" data-widget_type="button.default">
+				<div class="elementor-widget-container">
+					<div class="elementor-button-wrapper">
+			<a class="elementor-button elementor-button-link elementor-size-sm" href="https://learnlinux.link/lpi-course" target="_blank">
+						<span class="elementor-button-content-wrapper">
+									<span class="elementor-button-text">Become a Channel Member on YouTube</span>
+					</span>
+					</a>
+		</div>
+				</div>
+				</div>
+					</div>
+				</div>
+				</div>
+					</div>
+				</div>
+				</div>
+				<div data-elementor-type="footer" data-elementor-id="3104" class="elementor elementor-3104 elementor-location-footer" data-elementor-post-type="elementor_library">
+			<div class="elementor-element elementor-element-900233e e-con-full e-flex e-con e-parent" data-id="900233e" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+		<div class="elementor-element elementor-element-bece853 e-con-full e-flex e-con e-child" data-id="bece853" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+				<div class="elementor-element elementor-element-94a3ce7 elementor-widget elementor-widget-heading" data-id="94a3ce7" data-element_type="widget" data-widget_type="heading.default">
+				<div class="elementor-widget-container">
+			<h2 class="elementor-heading-title elementor-size-default">More Information</h2>		</div>
+				</div>
+				<div class="elementor-element elementor-element-cff60ab elementor-nav-menu__align-center elementor-nav-menu--dropdown-tablet elementor-nav-menu__text-align-aside elementor-nav-menu--toggle elementor-nav-menu--burger elementor-widget elementor-widget-nav-menu" data-id="cff60ab" data-element_type="widget" data-settings="{&quot;layout&quot;:&quot;horizontal&quot;,&quot;submenu_icon&quot;:{&quot;value&quot;:&quot;&lt;svg class=\&quot;e-font-icon-svg e-fas-caret-down\&quot; viewBox=\&quot;0 0 320 512\&quot; xmlns=\&quot;http:\/\/www.w3.org\/2000\/svg\&quot;&gt;&lt;path d=\&quot;M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z\&quot;&gt;&lt;\/path&gt;&lt;\/svg&gt;&quot;,&quot;library&quot;:&quot;fa-solid&quot;},&quot;toggle&quot;:&quot;burger&quot;}" data-widget_type="nav-menu.default">
+				<div class="elementor-widget-container">
+						<nav class="elementor-nav-menu--main elementor-nav-menu__container elementor-nav-menu--layout-horizontal e--pointer-underline e--animation-fade">
+				<ul id="menu-1-cff60ab" class="elementor-nav-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3135"><a href="https://www.learnlinux.tv/about-me/" class="elementor-item">About Learn Linux TV</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3136"><a href="https://www.learnlinux.tv/content-ethics/" class="elementor-item">Content Ethics</a></li>
+</ul>			</nav>
+					<div class="elementor-menu-toggle" role="button" tabindex="0" aria-label="Menu Toggle" aria-expanded="false">
+			<svg aria-hidden="true" role="presentation" class="elementor-menu-toggle__icon--open e-font-icon-svg e-eicon-menu-bar" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d="M104 333H896C929 333 958 304 958 271S929 208 896 208H104C71 208 42 237 42 271S71 333 104 333ZM104 583H896C929 583 958 554 958 521S929 458 896 458H104C71 458 42 487 42 521S71 583 104 583ZM104 833H896C929 833 958 804 958 771S929 708 896 708H104C71 708 42 737 42 771S71 833 104 833Z"></path></svg><svg aria-hidden="true" role="presentation" class="elementor-menu-toggle__icon--close e-font-icon-svg e-eicon-close" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d="M742 167L500 408 258 167C246 154 233 150 217 150 196 150 179 158 167 167 154 179 150 196 150 212 150 229 154 242 171 254L408 500 167 742C138 771 138 800 167 829 196 858 225 858 254 829L496 587 738 829C750 842 767 846 783 846 800 846 817 842 829 829 842 817 846 804 846 783 846 767 842 750 829 737L588 500 833 258C863 229 863 200 833 171 804 137 775 137 742 167Z"></path></svg>			<span class="elementor-screen-only">Menu</span>
+		</div>
+					<nav class="elementor-nav-menu--dropdown elementor-nav-menu__container" aria-hidden="true">
+				<ul id="menu-2-cff60ab" class="elementor-nav-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3135"><a href="https://www.learnlinux.tv/about-me/" class="elementor-item" tabindex="-1">About Learn Linux TV</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3136"><a href="https://www.learnlinux.tv/content-ethics/" class="elementor-item" tabindex="-1">Content Ethics</a></li>
+</ul>			</nav>
+				</div>
+				</div>
+				</div>
+		<div class="elementor-element elementor-element-7d19e0a e-con-full e-flex e-con e-child" data-id="7d19e0a" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+				<div class="elementor-element elementor-element-fcc8930 elementor-widget elementor-widget-heading" data-id="fcc8930" data-element_type="widget" data-widget_type="heading.default">
+				<div class="elementor-widget-container">
+			<h2 class="elementor-heading-title elementor-size-default">Connect</h2>		</div>
+				</div>
+				<div class="elementor-element elementor-element-49a7bb1 elementor-nav-menu__align-center elementor-nav-menu--dropdown-tablet elementor-nav-menu__text-align-aside elementor-nav-menu--toggle elementor-nav-menu--burger elementor-widget elementor-widget-nav-menu" data-id="49a7bb1" data-element_type="widget" data-settings="{&quot;layout&quot;:&quot;horizontal&quot;,&quot;submenu_icon&quot;:{&quot;value&quot;:&quot;&lt;svg class=\&quot;e-font-icon-svg e-fas-caret-down\&quot; viewBox=\&quot;0 0 320 512\&quot; xmlns=\&quot;http:\/\/www.w3.org\/2000\/svg\&quot;&gt;&lt;path d=\&quot;M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z\&quot;&gt;&lt;\/path&gt;&lt;\/svg&gt;&quot;,&quot;library&quot;:&quot;fa-solid&quot;},&quot;toggle&quot;:&quot;burger&quot;}" data-widget_type="nav-menu.default">
+				<div class="elementor-widget-container">
+						<nav class="elementor-nav-menu--main elementor-nav-menu__container elementor-nav-menu--layout-horizontal e--pointer-underline e--animation-fade">
+				<ul id="menu-1-49a7bb1" class="elementor-nav-menu"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3140"><a href="https://www.linkedin.com/company/learnlinuxtv" class="elementor-item">LinkedIn</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3141"><a href="https://twitter.com/JayTheLinuxGuy" class="elementor-item">Twitter</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3142"><a href="https://www.youtube.com/@LearnLinuxTV" class="elementor-item">YouTube</a></li>
+</ul>			</nav>
+					<div class="elementor-menu-toggle" role="button" tabindex="0" aria-label="Menu Toggle" aria-expanded="false">
+			<svg aria-hidden="true" role="presentation" class="elementor-menu-toggle__icon--open e-font-icon-svg e-eicon-menu-bar" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d="M104 333H896C929 333 958 304 958 271S929 208 896 208H104C71 208 42 237 42 271S71 333 104 333ZM104 583H896C929 583 958 554 958 521S929 458 896 458H104C71 458 42 487 42 521S71 583 104 583ZM104 833H896C929 833 958 804 958 771S929 708 896 708H104C71 708 42 737 42 771S71 833 104 833Z"></path></svg><svg aria-hidden="true" role="presentation" class="elementor-menu-toggle__icon--close e-font-icon-svg e-eicon-close" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d="M742 167L500 408 258 167C246 154 233 150 217 150 196 150 179 158 167 167 154 179 150 196 150 212 150 229 154 242 171 254L408 500 167 742C138 771 138 800 167 829 196 858 225 858 254 829L496 587 738 829C750 842 767 846 783 846 800 846 817 842 829 829 842 817 846 804 846 783 846 767 842 750 829 737L588 500 833 258C863 229 863 200 833 171 804 137 775 137 742 167Z"></path></svg>			<span class="elementor-screen-only">Menu</span>
+		</div>
+					<nav class="elementor-nav-menu--dropdown elementor-nav-menu__container" aria-hidden="true">
+				<ul id="menu-2-49a7bb1" class="elementor-nav-menu"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3140"><a href="https://www.linkedin.com/company/learnlinuxtv" class="elementor-item" tabindex="-1">LinkedIn</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3141"><a href="https://twitter.com/JayTheLinuxGuy" class="elementor-item" tabindex="-1">Twitter</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3142"><a href="https://www.youtube.com/@LearnLinuxTV" class="elementor-item" tabindex="-1">YouTube</a></li>
+</ul>			</nav>
+				</div>
+				</div>
+				</div>
+				</div>
+		<div class="elementor-element elementor-element-5b18536 e-flex e-con-boxed e-con e-parent" data-id="5b18536" data-element_type="container">
+					<div class="e-con-inner">
+				<div class="elementor-element elementor-element-e2a8dd6 elementor-widget elementor-widget-text-editor" data-id="e2a8dd6" data-element_type="widget" data-widget_type="text-editor.default">
+				<div class="elementor-widget-container">
+							<p>© Learn Linux TV</p>						</div>
+				</div>
+					</div>
+				</div>
+				</div>
+		
+<script src="https://www.learnlinux.tv/wp-content/themes/hello-elementor/assets/js/hello-frontend.min.js?ver=3.1.0" id="hello-theme-frontend-js"></script>
+<script src="https://www.learnlinux.tv/wp-content/plugins/youtube-embed-plus/scripts/fitvids.min.js?ver=14.2.1.2" id="__ytprefsfitvids__-js"></script>
+<script src="https://www.learnlinux.tv/wp-content/plugins/elementor-pro/assets/lib/smartmenus/jquery.smartmenus.min.js?ver=1.2.1" id="smartmenus-js"></script>
+<script src="https://www.learnlinux.tv/wp-content/plugins/elementor-pro/assets/js/webpack-pro.runtime.min.js?ver=3.22.1" id="elementor-pro-webpack-runtime-js"></script>
+<script src="https://www.learnlinux.tv/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=3.22.3" id="elementor-webpack-runtime-js"></script>
+<script src="https://www.learnlinux.tv/wp-content/plugins/elementor/assets/js/frontend-modules.min.js?ver=3.22.3" id="elementor-frontend-modules-js"></script>
+<script src="https://www.learnlinux.tv/wp-includes/js/dist/vendor/wp-polyfill-inert.min.js?ver=3.1.2" id="wp-polyfill-inert-js"></script>
+<script src="https://www.learnlinux.tv/wp-includes/js/dist/vendor/regenerator-runtime.min.js?ver=0.14.0" id="regenerator-runtime-js"></script>
+<script src="https://www.learnlinux.tv/wp-includes/js/dist/vendor/wp-polyfill.min.js?ver=3.15.0" id="wp-polyfill-js"></script>
+<script src="https://www.learnlinux.tv/wp-includes/js/dist/hooks.min.js?ver=2810c76e705dd1a53b18" id="wp-hooks-js"></script>
+<script src="https://www.learnlinux.tv/wp-includes/js/dist/i18n.min.js?ver=5e580eb46a90c2b997e6" id="wp-i18n-js"></script>
+<script id="wp-i18n-js-after">
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+</script>
+<script id="elementor-pro-frontend-js-before">
+var ElementorProFrontendConfig = {"ajaxurl":"https:\/\/www.learnlinux.tv\/wp-admin\/admin-ajax.php","nonce":"f157cf509a","urls":{"assets":"https:\/\/www.learnlinux.tv\/wp-content\/plugins\/elementor-pro\/assets\/","rest":"https:\/\/www.learnlinux.tv\/wp-json\/"},"shareButtonsNetworks":{"facebook":{"title":"Facebook","has_counter":true},"twitter":{"title":"Twitter"},"linkedin":{"title":"LinkedIn","has_counter":true},"pinterest":{"title":"Pinterest","has_counter":true},"reddit":{"title":"Reddit","has_counter":true},"vk":{"title":"VK","has_counter":true},"odnoklassniki":{"title":"OK","has_counter":true},"tumblr":{"title":"Tumblr"},"digg":{"title":"Digg"},"skype":{"title":"Skype"},"stumbleupon":{"title":"StumbleUpon","has_counter":true},"mix":{"title":"Mix"},"telegram":{"title":"Telegram"},"pocket":{"title":"Pocket","has_counter":true},"xing":{"title":"XING","has_counter":true},"whatsapp":{"title":"WhatsApp"},"email":{"title":"Email"},"print":{"title":"Print"},"x-twitter":{"title":"X"},"threads":{"title":"Threads"}},"facebook_sdk":{"lang":"en_US","app_id":""},"lottie":{"defaultAnimationUrl":"https:\/\/www.learnlinux.tv\/wp-content\/plugins\/elementor-pro\/modules\/lottie\/assets\/animations\/default.json"}};
+</script>
+<script src="https://www.learnlinux.tv/wp-content/plugins/elementor-pro/assets/js/frontend.min.js?ver=3.22.1" id="elementor-pro-frontend-js"></script>
+<script src="https://www.learnlinux.tv/wp-content/plugins/elementor/assets/lib/waypoints/waypoints.min.js?ver=4.0.2" id="elementor-waypoints-js"></script>
+<script src="https://www.learnlinux.tv/wp-includes/js/jquery/ui/core.min.js?ver=1.13.2" id="jquery-ui-core-js"></script>
+<script id="elementor-frontend-js-before">
+var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false,"isScriptDebug":false},"i18n":{"shareOnFacebook":"Share on Facebook","shareOnTwitter":"Share on Twitter","pinIt":"Pin it","download":"Download","downloadImage":"Download image","fullscreen":"Fullscreen","zoom":"Zoom","share":"Share","playVideo":"Play Video","previous":"Previous","next":"Next","close":"Close","a11yCarouselWrapperAriaLabel":"Carousel | Horizontal scrolling: Arrow Left & Right","a11yCarouselPrevSlideMessage":"Previous slide","a11yCarouselNextSlideMessage":"Next slide","a11yCarouselFirstSlideMessage":"This is the first slide","a11yCarouselLastSlideMessage":"This is the last slide","a11yCarouselPaginationBulletMessage":"Go to slide"},"is_rtl":false,"breakpoints":{"xs":0,"sm":480,"md":768,"lg":1025,"xl":1440,"xxl":1600},"responsive":{"breakpoints":{"mobile":{"label":"Mobile Portrait","value":767,"default_value":767,"direction":"max","is_enabled":true},"mobile_extra":{"label":"Mobile Landscape","value":880,"default_value":880,"direction":"max","is_enabled":false},"tablet":{"label":"Tablet Portrait","value":1024,"default_value":1024,"direction":"max","is_enabled":true},"tablet_extra":{"label":"Tablet Landscape","value":1200,"default_value":1200,"direction":"max","is_enabled":false},"laptop":{"label":"Laptop","value":1366,"default_value":1366,"direction":"max","is_enabled":false},"widescreen":{"label":"Widescreen","value":2400,"default_value":2400,"direction":"min","is_enabled":false}}},"version":"3.22.3","is_static":false,"experimentalFeatures":{"e_optimized_assets_loading":true,"e_optimized_css_loading":true,"e_font_icon_svg":true,"additional_custom_breakpoints":true,"container":true,"container_grid":true,"e_swiper_latest":true,"e_onboarding":true,"theme_builder_v2":true,"hello-theme-header-footer":true,"home_screen":true,"editor_v2":true,"ai-layout":true,"landing-pages":true,"nested-elements":true,"display-conditions":true,"form-submissions":true,"mega-menu":true,"taxonomy-filter":true},"urls":{"assets":"https:\/\/www.learnlinux.tv\/wp-content\/plugins\/elementor\/assets\/"},"swiperClass":"swiper","settings":{"page":[],"editorPreferences":[]},"kit":{"body_background_background":"gradient","hello_footer_logo_type":"title","active_breakpoints":["viewport_mobile","viewport_tablet"],"global_image_lightbox":"yes","lightbox_enable_counter":"yes","lightbox_enable_fullscreen":"yes","lightbox_enable_zoom":"yes","lightbox_enable_share":"yes","lightbox_title_src":"title","lightbox_description_src":"description","hello_header_logo_type":"logo","hello_header_menu_layout":"horizontal"},"post":{"id":4065,"title":"Complete%20Ansible%20Semaphore%20Tutorial%3A%20From%20Installation%20to%20Automation%20%E2%80%93%20Learn%20Linux%20TV","excerpt":"Do you want to make server deployment easier? Consider Ansible Semaphore: An awesome project that provides a full GUI experience around Ansible, enabling you to take your automation game to the next level. In this video, Jay will show you how to install Ansible Semaphore, set it up, and more!","featuredImage":false}};
+</script>
+<script src="https://www.learnlinux.tv/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=3.22.3" id="elementor-frontend-js"></script>
+<script src="https://www.learnlinux.tv/wp-content/plugins/elementor-pro/assets/js/elements-handlers.min.js?ver=3.22.1" id="pro-elements-handlers-js"></script>
+
+</body>
+</html>
+
+
+<!-- Page cached by LiteSpeed Cache 6.2.0.1 on 2024-06-27 15:05:27 -->

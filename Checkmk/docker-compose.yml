@@ -1,0 +1,32 @@
+services:
+  checkmk:
+    container_name: checkmk
+    image: checkmk/check-mk-raw:2.3.0p7
+    tmpfs:
+      - /opt/omd/sites/cmk/tmp:uid=1000,gid=1000
+    ulimits:
+      nofile: 1024
+    volumes:
+      - /home/miker/docker/checkmk/monitoring:/omd/sites
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "8080:8000"
+      - "8500:5000"
+    restart: unless-stopped
+    networks:
+      checkmk_network:
+
+networks:
+    checkmk_network:
+
+
+# When build is complete, you need to look in the logs for the default username and password.
+
+# Passwd for checkmk - Uv8bJ0nDFxLxXz9qJxe0
+
+# To install the agent on a linux system:
+    # sudo wget http://192.168.0.183:8500/cmk/check_mk/agents/check-mk-agent_2.3.0p7-1_all.deb
+    # sudo dpkg -i check-mk-agent_2.3.0p7-1_all.deb
+
+
+    scp check-mk-agent_2.3.0p7-1_all.deb miker@107.175.245.171 /home/miker

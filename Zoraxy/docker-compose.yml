@@ -1,0 +1,20 @@
+services:
+  zoraxy-docker:
+    image: zoraxydocker/zoraxy:latest
+    container_name: zoraxy
+    ports:
+      - 8081:80
+      - 4433:443
+      - 8005:8005
+    volumes:
+      - ./config:/opt/zoraxy/config/
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime
+    environment:
+      PORT: "8005"
+      FASTGEOIP: "true"
+    networks:
+      - proxy
+networks:
+  proxy:
+    external: true

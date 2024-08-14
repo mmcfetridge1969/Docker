@@ -1,0 +1,32 @@
+services:
+  app:
+    # Pull latest image
+    image: 'portainer/portainer-ce:latest'
+
+    # set the container name within docker
+    container_name: portainer
+
+    # Sets the service to restart always unless it is stopped manually.
+    restart: unless-stopped
+
+    # Set port that web service will be served on
+    ports:
+    # These ports are in format <host-port>:<container-port>
+      - '9443:9443' # Public HTTP Port
+
+    # Mapping data to the volume created for this service
+    volumes:
+      - /home/miker/docker/portainer/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    # Network to join in docker which is named below
+    networks:
+      - proxy
+
+# create PROXY network for NPM security. This will allow NPM to see and talk to >
+networks:
+  proxy:
+    external: true
+
+
+
