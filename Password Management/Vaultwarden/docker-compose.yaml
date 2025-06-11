@@ -1,0 +1,38 @@
+
+services:
+  vaultwarden:
+    container_name: vaultwarden
+    image: vaultwarden/server:latest
+    restart: unless-stopped
+    volumes:
+      - ./data/:/data/
+#    ports:
+#      - 8780:80
+    environment:
+      - DOMAIN=https://vault.mikeandrebel.com
+      - LOGIN_RATELIMIT_MAX_BURST=10
+      - LOGIN_RATELIMIT_SECONDS=60
+      - ADMIN_RATELIMIT_MAX_BURST=10
+      - ADMIN_RATELIMIT_SECONDS=60
+      - ADMIN_TOKEN=kane9RVtkbgu3j0NNZiAOA1mQ
+      - SENDS_ALLOWED=true
+      - EMERGENCY_ACCESS_ALLOWED=true
+      - WEB_VAULT_ENABLED=true
+      - SIGNUPS_ALLOWED=false
+      - SIGNUPS_VERIFY=false
+      - SIGNUPS_VERIFY_RESEND_TIME=3600
+      - SIGNUPS_VERIFY_RESEND_LIMIT=5
+      - SIGNUPS_DOMAINS_WHITELIST=aol.com,mcfetridge.us
+      - SMTP_HOST=mail.mcfetridge.us
+      - SMTP_FROM=miker@mcfetridge.us
+      - SMTP_FROM_NAME=Vaultwarden
+      - SMTP_SECURITY=starttls
+      - SMTP_PORT=587
+      - SMTP_USERNAME=miker@mcfetridge.us
+      - SMTP_PASSWORD="!Sucyetat123"
+      - SMTP_AUTH_MECHANISM="Login"
+    networks:
+      - proxy
+networks:
+  proxy:
+    external: true

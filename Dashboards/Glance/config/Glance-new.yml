@@ -1,0 +1,253 @@
+# Note: I installed this with the Proxmox Helper Script. So this config file is in /opt/glance. If you run with docker their may be multiple configuration files.
+theme:
+  background-color: 0 0 16
+  primary-color: 43 59 81
+  positive-color: 61 66 44
+  negative-color: 6 96 59
+pages:
+  - name: Startpage
+    width: slim
+    hide-desktop-navigation: false
+    center-vertically: true
+    columns:
+
+      - size: small
+        widgets:
+          - type: dns-stats
+            service: adguard
+            url: http://192.168.2.10
+              username: mmcfetridge
+              password: ${ADGUARD_PASSWORD}
+
+          - type: custom-api
+            title: Immich stats
+            cache: 1d
+            url: http://192.168.2.13:2283//api/server/statistics
+            headers:
+              x-api-key: fYDkorU0ik0xOOvfwGiuYtcHWZmggaNYfvHARDTdWo
+              Accept: application/json
+            template: |
+              <div class="flex justify-between text-center">
+                <div>
+                    <div class="color-highlight size-h3">{{ .JSON.Int "photos" | formatNumber }}</div>
+                    <div class="size-h6">PHOTOS</div>
+                </div>
+                <div>
+                    <div class="color-highlight size-h3">{{ .JSON.Int "videos" | formatNumber }}</div>
+                    <div class="size-h6">VIDEOS</div>
+                </div>
+                <div>
+                    <div class="color-highlight size-h3">{{ div (.JSON.Int "usage" | toFloat) 1073741824 | toInt | formatNumber }}GB</div>
+                    <div class="size-h6">USAGE</div>
+                </div>
+              </div>
+
+          - type: repository
+            repository: mmcfetridge1969/Docker
+            pull-requests-limit: 5
+            issues-limit: 3
+            commits-limit: 3
+
+      - size: full
+        widgets:
+          - type: search
+            autofocus: true
+            search-engine: google
+            new-tab: true
+            bangs:
+              - title: YouTube
+                shortcut: "!yt"
+                url: https://www.youtube.com/results?search_query={QUERY}
+              - title: Github
+                shortcut: "!gh"
+                url: https://github.com/search?q={QUERY}&type=repositories
+
+          - type: monitor
+            cache: 1m
+            title: Services
+            sites:
+              - title: Proxmox1
+                url: https://192.168.2.1:8006
+                check-url: https://192.168.2.1:8006
+                allow-insecure: true
+                icon: di:proxmox
+
+              - title: Proxmox2
+                url: https://192.168.2.2:8006
+                check-url: https://192.168.2.2:8006
+                allow-insecure: true
+                icon: di:proxmox
+
+              - title: Jellyfin
+                url: https://jellyfin.mikemcfetridge.com
+                check-url: http://192.168.2.16:8096
+                icon: di:jellyfin
+
+              - title: Nextcloud
+                url: https://nextcloud.mikemcfetridge.com
+                check-url: http://192.168.2.13:32323
+                icon: di:nextcloud
+
+              - title: Immich
+                url: https://immich.mikemcfetridge.com
+                check-url: http://192.168.2.13:2283/
+                icon: di:immich
+
+              - title: Adguard
+                url: http://192.168.2.10
+                check-url: http://192.168.2.10
+                icon: di:adguard
+
+              - title: Vaultwarden
+                url: https://vault.mikemcfetridge.com/
+                check-url: http://192.168.2.13:12000
+                icon: di:vaultwarden-light
+
+              - title: NGINX Proxy Manager
+                url: https://proxy.mikemcfetridge.com/
+                check-url: http://192.168.2.7:81/
+                icon: di:nginx
+
+          - type: monitor
+            cache: 1m
+            title: Servarr
+            sites:
+              - title: Jellyseerr
+                url: http://192.168.2.16:5055
+                check-url: http://192.168.2.16:5055
+                icon: di:jellyseerr
+              - title: Radarr
+                url: http://192.168.2.16:7878
+                check-url: http://192.168.2.16:7878
+                icon: di:radarr
+              - title: Sonarr
+                url: http://192.168.2.16:8989
+                check-url: http://192.168.2.16:8989
+                icon: di:sonarr
+              - title: Lidarr
+                url: http://192.168.2.16:8686
+                check-url: http://192.168.2.16:8686
+                icon: di:lidarr
+              - title: Bazarr
+                url: http://192.168.2.16:6767
+                check-url: http://192.168.2.16:6767
+                icon: di:bazarr
+              - title: Prowlarr
+                url: http://192.168.2.16:9696
+                check-url: http://192.168.2.16:9696
+                icon: di:prowlarr
+              - title: qBittorrent
+                url: http://192.168.2.16:8080
+                check-url: http://192.168.2.16:8080
+                icon: di:qbittorrent
+              - title: NZBGet
+                url: http://192.168.2.16:6789
+                check-url: http://192.168.2.16:6789
+                icon: di:nzbget
+
+              - title: Portainer-1
+                url: https://192.168.2.7:9445
+                check-url: https://192.168.2.13:9445
+                icon: di:portainer
+
+              - title: Portainer-2
+                url: https://192.168.2.13:9445
+                check-url: https://192.168.2.13:9445
+                icon: di:portainer
+
+  - name: Home
+    # Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
+    # hide-desktop-navigation: true
+    columns:
+      - size: small
+        widgets:
+          - type: calendar
+            first-day-of-week: monday
+
+          - type: rss
+            limit: 10
+            collapse-after: 3
+            cache: 12h
+            feeds:
+              - url: https://omgubuntu.co.uk/feed
+                title: OmgUbuntu
+                limit: 4
+              - url: https://9to5linux.com/feed/atom
+                title: 9to5Linux
+                limit: 4
+
+          - type: twitch-channels
+            channels:
+              - technotim
+              - piratesoftware
+
+      - size: full
+        widgets:
+          - type: group
+            widgets:
+              - type: hacker-news
+              - type: lobsters
+
+          - type: videos
+            channels:
+              - UCXuqSBlHAE6Xw-yeJA0Tunw # Linus Tech Tips
+              - UCR-DXc1voovS8nhAvccRZhg # Jeff Geerling
+              - UCsBjURrPoezykLs9EqgamOA # Fireship
+              - UCBJycsmduvYEL83R_U4JriQ # Marques Brownlee
+
+          - type: group
+            widgets:
+              - type: reddit
+                subreddit: technology
+                show-thumbnails: true
+              - type: reddit
+                subreddit: selfhosted
+                show-thumbnails: true
+
+      - size: small
+        widgets:
+          - type: weather
+            location: 22712
+            units: imperial
+            hour-format: 12h # alternatively "24h"
+            # Optionally hide the location from being displayed in the widget
+            # hide-location: true
+
+          - type: markets
+            # The link to go to when clicking on the symbol in the UI,
+            # {SYMBOL} will be substituded with the symbol for each market
+            symbol-link-template: https://www.tradingview.com/symbols/{SYMBOL}/news
+            markets:
+              - symbol: LTC-USD
+                name: Litecoin
+              - symbol: XRP-USD
+                name: Ripple
+              - symbol: AAPL
+                name: Apple
+              - symbol: MSFT
+                name: Microsoft
+
+          - type: releases
+            cache: 1d
+            # Without authentication the Github API allows for up to 60 requests per hour. You can create a
+            # read-only token from your Github account settings and use it here to increase the limit.
+            # token: ...
+            repositories:
+              - glanceapp/glance
+              - TechHutTV/homelab
+              - immich-app/immich
+
+  # Add more pages here:
+  # - name: Your page name
+  #   columns:
+  #     - size: small
+  #       widgets:
+  #         # Add widgets here
+
+  #     - size: full
+  #       widgets:
+  #         # Add widgets here
+
+  #     - size: small
+  #       widgets:
+  #         # Add widgets here

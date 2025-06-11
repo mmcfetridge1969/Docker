@@ -1,0 +1,411 @@
+# Compose file for the *arr stack. Configuration files are stored in the
+# directory you launch the compose file on. Change to bind mounts if needed.
+# All containers are ran with user and group ids of the main user and
+# group to aviod permissions issues of downloaded files, please refer
+# the read me file for more information.
+
+#############################################################################
+# NOTICE: We recently switched to using a .env file. PLEASE refer to the docs.
+# https://github.com/TechHutTV/homelab/tree/main/media#docker-compose-and-env
+#############################################################################
+
+networks:
+  servarrnetwork:
+    name: servarrnetwork
+    ipam:
+      config:
+        - subnet: 172.69.0.0/24
+
+services:
+# airvpn recommended (referral url: https://airvpn.org/?referred_by=673908)
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+      - NET_RAW
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.69.0.2
+    ports:
+      - 8118:8118 # qbittorrent web interface
+      - 6881:6881 # qbittorrent torrent port
+      - 9696:9696 # prowlarr
+      - 9117:9117 # Jackett
+      - 6789:6789 # nzbget
+    volumes:
+      - ./gluetun:/gluetun
+    environment:
+      - VPN_SERVICE_PROVIDER=airvpn
+      - VPN_TYPE=wireguard
+      - FIREWALL_VPN_INPUT_PORTS=29261
+      - WIREGUARD_PRIVATE_KEY=eDgf3GPFy2ltgx2RkD/Vx5wKZ4dVi28YbQmSJOrbWmk=
+      - WIREGUARD_PRESHARED_KEY=+0+hrSdzRUxKDNk1Q37PNmNJ2jsj2EzF45JtbZad4lI=
+      - WIREGUARD_ADDRESSES=10.175.23.30
+      - SERVER_COUNTRIES=Canada
+      - BLOCK_MALICIOUS=off
+    healthcheck:
+      test: ping -c 1 www.google.com || exit 1
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    restart: unless-stopped
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - WEBUI_PORT=8118
+      - TORRENTING_PORT=29261
+    volumes:
+      - /home/miker/docker/qbittorrent/config:/config
+      - /home/miker/docker/data/downloads/qbittorrent/completed:/downloads              # This is to be used in settings/downloads "Default Save Path" = /downloads
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      gluetun:
+        condition: service_healthy
+        restart: true
+    network_mode: service:gluetun
+    healthcheck:
+        test: ping -c 1 www.google.com || exit 1
+        interval: 60s
+        retries: 3
+        start_period: 20s
+        timeout: 10s
+
+# See the 'qBittorrent Stalls with VPN Timeout' section for more information.
+  deunhealth:
+    image: qmcgaw/deunhealth
+    container_name: deunhealth
+    network_mode: "none"
+    environment:
+      - LOG_LEVEL=info
+      - HEALTH_SERVER_ADDRESS=127.0.0.1:9999
+      - TZ=America/New_York
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  nzbget:
+    image: lscr.io/linuxserver/nzbget:latest
+    container_name: nzbget
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/miker/docker/nzbget:/config
+      - /home/miker/docker/data:/data
+    depends_on:
+      gluetun:
+        condition: service_healthy
+        restart: true
+    restart: unless-stopped
+    network_mode: service:gluetun
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - /home/miker/docker/prowlarr/config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    depends_on:
+      gluetun:
+        condition: service_healthy
+        restart: true
+    network_mode: service:gluetun
+
+  jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: jackett
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - AUTO_UPDATE=true #optional
+    volumes:
+      - /home/miker/docker/jackett/data:/config
+      - /home/miker/docker/data/downloads/qbittorrent/completed:/downloads
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    depends_on:
+      gluetun:
+        condition: service_healthy
+        restart: true
+    network_mode: service:gluetun
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - /home/miker/docker/sonarr/config:/config
+      - /home/miker/docker/data/shows:/data/tv
+      - /home/miker/docker/data/downloads/qbittorrent/completed:/downloads
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 8989:8989
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.69.0.3
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - /home/miker/docker/radarr/config:/config
+      - /home/miker/docker/data/movies:/data/movies
+      - /home/miker/docker/data/downloads/qbittorrent/completed:/downloads
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 7878:7878
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.69.0.4
+
+  lidarr:
+    container_name: lidarr
+    image: lscr.io/linuxserver/lidarr:latest
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - /home/miker/docker/lidarr/config:/config
+      - /home/miker/docker/data/music:/data/music
+      - /home/miker/docker/data/downloads/qbittorrent/completed:/downloads
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 8686:8686
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.69.0.5
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - /home/miker/docker/bazarr/config:/config
+      - /home/miker/docker/data/movies:/data/movies
+      - /home/miker/docker/data/shows:/data/tv
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 6767:6767
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.69.0.6
+
+  readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    ports:
+      - 8787:8787
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - /home/miker/docker/readarr/config:/config
+      - /home/miker/docker/data/books:/data/books
+      - /home/miker/docker/data/downloads/qbittorrent/completed:/downloads
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.69.0.7
+
+  huntarr:
+    image: ghcr.io/plexguide/huntarr:latest
+    container_name: huntarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - /home/miker/docker/huntarr/config:/config
+      - /home/miker/docker/data:/data
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 9705:9705
+    restart: unless-stopped
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.69.0.27
+
+  swaparr:
+    image: ghcr.io/thijmengthn/swaparr:latest
+    container_name: swaparr-radarr
+    environment:
+      - BASEURL=http://192.168.2.16:7878                  # IP or FQDN           (Required)
+      - APIKEY=ee95503f6fca4cf7b9c8c3f3fc45df39           # Radarr API Key       (Required)
+      - PLATFORM=radarr               # "radarr", "sonarr".. (Optional) default: radarr
+      - MAX_STRIKES=3                 # Positive number      (Optional) default: 3
+      - SCAN_INTERVAL=10m             # 1d, 6h, 30m, etc..   (Optional) default: 10m
+      - MAX_DOWNLOAD_TIME=2h          # 1d, 6h, 30m, etc..   (Optional) default: 2h
+      - IGNORE_ABOVE_SIZE=25GB        # 1TB, 1GB, 1MB, etc.. (Optional) default: 25GB
+      - REMOVE_FROM_CLIENT=true       # Boolean              (Optional) default: true
+      - DRY_RUN=false                 # Boolean              (Optional) default: false
+      - CHECK_INTERVAL=60
+      - MIN_SIZE=100
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - /home/miker/docker/sqaparr/config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.69.0.28
+
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - /home/miker/docker/jellyfin/config:/config
+      - /home/miker/docker/jellyfin/data:/data
+      - /etc/localtime:/etc/localtime:ro
+      - /home/miker/docker/data/shows:/data/tvshows
+      - /home/miker/docker/data/movies:/data/movies
+    ports:
+      - 8096:8096
+      - 7359:7359/udp #Service Discovery
+      - 1900:1900/udp #Client Discovery
+    restart: unless-stopped
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.69.0.8
+
+  jellystat-db:
+    image: postgres:15.2
+    container_name: jellystat-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "!Sucyetat123"
+    volumes:
+      - /home/miker/docker/jellystat/postgres:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.69.0.9
+
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      - LOG_LEVEL=debug
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - /home/miker/docker/jellyseerr/config:/app/config
+    restart: unless-stopped
+    ports:
+      - 5055:5055
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.69.0.10
+
+  jellystat:
+    image: cyfershepard/jellystat:latest
+    container_name: jellystat
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "!Sucyetat123"
+      POSTGRES_IP: jellystat-db
+      POSTGRES_PORT: 5432
+      JWT_SECRET: "!Sucyetat123"
+      TZ: America/New_York
+    volumes:
+      - /home/miker/docker/jellystat/backup-data:/app/backend/backup-data
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+    depends_on:
+      - jellystat-db
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.69.0.11
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    ports:
+      - 9445:9443
+    volumes:
+      - /home/miker/docker/portainer/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    ports:
+      - 13378:80
+    volumes:
+      - /home/miker/docker/data/books:/audiobooks
+      - /home/miker/docker/data/podcasts:/podcasts
+      - /home/miker/docker/audiobookshelf/metadata:/metadata
+      - /home/miker/docker/audiobookshelf/config:/config
+    restart: unless-stopped
+
+#  watchtower:
+#    image: containrrr/watchtower
+#    container_name: 'watchtower'
+#    restart: 'unless-stopped'
+#    environment:
+#      TZ: America/New_York
+#      WATCHTOWER_CLEANUP: true
+#      WATCHTOWER_INCLUDE_RESTARTING: true
+#      WATCHTOWER_ROLLING_RESTARTING: true
+#      WATCHTOWER_SCHEDULE: "0 0 4 * * *"
+#      WATCHTOWER_INCLUDE_STOPPED: true
+#      WATCHTOWER_NOTIFICATIONS: email
+#      WATCHTOWER_NOTIFICATIONS_HOSTNAME: "Media Stack Server"
+#      WATCHTOWER_NOTIFICATION_EMAIL_FROM: miker@mcfetridge.us
+#      WATCHTOWER_NOTIFICATION_EMAIL_TO: miker@mcfetridge.us
+#      WATCHTOWER_NOTIFICATION_EMAIL_SERVER: mail.mcfetridge.us
+#      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT: 587
+#      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER: miker@mcfetridge.us
+#      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD: "!Sucyetat123"
+#    security_opt:
+#      - no-new-privileges:true
+#    volumes:
+#      - /etc/timezone:/etc/timezone:ro
+#      - /etc/localtime:/etc/localtime:ro
+#      - /var/run/docker.sock:/var/run/docker.sock

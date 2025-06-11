@@ -1,0 +1,17 @@
+services:
+  dumbassets:
+    container_name: dumbassets
+    image: dumbwareio/dumbassets:latest
+    restart: unless-stopped
+    ports: 
+      - 3001:3000
+    volumes:
+      - /home/miker/dockerapps/DumbAssets/data:/app/data
+    environment:
+      NODE_ENV: ${DUMBASSETS_NODE_ENV:-production}
+      DEBUG: ${DUMBASSETS_DEBUG:-true}
+      SITE_TITLE: ${DUMBASSETS_SITE_TITLE:-DumbAssets}
+      BASE_URL: ${DUMBASSETS_BASE_URL:-https://dumbassets.mikemcfetridge.com}
+      DUMBASSETS_PIN: ${DUMBASSETS_PIN:-0969}
+      ALLOWED_ORIGINS: ${DUMBASSETS_ALLOWED_ORIGINS:-*}
+      APPRISE_URL: ${DUMBASSETS_APPRISE_URL:-}

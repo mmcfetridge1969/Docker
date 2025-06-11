@@ -1,0 +1,18 @@
+services:
+  gotify:
+    image: gotify/server
+    container_name: gotify
+    volumes:
+      - /home/miker/dockerapps/gotify:/app/data
+    restart: unless-stopped
+#    ports:
+#      - '8091:80'
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      proxy:
+    environment:
+      - TZ=America/New_York
+networks:
+  proxy:
+    external: true
