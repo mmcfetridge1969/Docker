@@ -3,7 +3,7 @@ services:
     image: gotify/server
     container_name: gotify
     volumes:
-      - /home/miker/dockerapps/gotify:/app/data
+      - ./gotify:/app/data
     restart: unless-stopped
 #    ports:
 #      - '8091:80'
@@ -13,6 +13,11 @@ services:
       proxy:
     environment:
       - TZ=America/New_York
-networks:
-  proxy:
-    external: true
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

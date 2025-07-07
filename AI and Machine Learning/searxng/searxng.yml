@@ -9,9 +9,9 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - /home/miker/dockerapps/searxng:/etc/searxng:rw
+      - ./searxng:/etc/searxng:rw
     environment:
-      - SEARXNG_BASE_URL=https://search.mikemcfetridge.com
+      - SEARXNG_BASE_URL=https://search.yourdomain.com
       - UWSGI_WORKERS=${SEARXNG_UWSGI_WORKERS:-4}
       - UWSGI_THREADS=${SEARXNG_UWSGI_THREADS:-4}
     logging:
@@ -25,3 +25,12 @@ services:
       - CHOWN
       - SETGID
       - SETUID
+
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

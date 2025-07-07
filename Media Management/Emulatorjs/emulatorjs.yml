@@ -1,0 +1,32 @@
+services:
+  emulatorjs:
+    image: lscr.io/linuxserver/emulatorjs:latest
+    container_name: emulatorjs
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - ./emulatorjs/config:/config
+      - ./emulatorjs/rompack:/data
+      - ./emulatorjs/rompack/atari2600/roms:/data/atari2600/roms:ro
+      - ./emulatorjs/rompack/gba/roms:/data/gba/roms:ro
+      - ./emulatorjs/rompack/n64/roms:/data/n64/roms:ro
+      - ./emulatorjs/rompack/nes/roms:/data/nes/roms:ro
+      - ./emulatorjs/rompack/ngp/roms:/data/ngp/roms:ro
+      - ./emulatorjs/rompack/segaMD/roms:/data/segaMD/roms:ro
+      - ./emulatorjs/rompack/segaMS/roms:/data/segaMS/roms:ro
+      - ./emulatorjs/rompack/snes/rom:/data/snes/roms:ro
+    ports:
+      - 3000:3000
+      - 8080:80
+      - 4001:4001 #optional
+    restart: unless-stopped
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

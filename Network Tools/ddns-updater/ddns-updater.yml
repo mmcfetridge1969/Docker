@@ -6,17 +6,14 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["core", "all"]
-    networks:
-      - default
     ports:
-      - "$DDNSUPDATER_PORT:8000"
+      - "8000:8000"
     volumes:
-      - $DOCKERDIR/appdata/ddns-updater:/updater/data # Owned by UID 1000
+      - ./appdata/ddns-updater:/updater/data # Owned by UID 1000
     environment:
-      TZ: $TZ
-      PUID: $PUID
-      PGID: $PGID
+      TZ: America/New_York
+      PUID: 1000
+      PGID: 1000
       PERIOD: 12h
       UPDATE_COOLDOWN_PERIOD: 5m
       PUBLICIP_DNS_TIMEOUT: 3s
@@ -29,4 +26,11 @@ services:
       # Other
       LOG_LEVEL: info
       # SHOUTRRR_ADDRESSES: $DISCORD_SHOUTRRR_ADDRESS
-    # DOCKER-LABELS-PLACEHOLDER
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

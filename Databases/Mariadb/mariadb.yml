@@ -5,14 +5,13 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["core", "all"]
     networks:
       - default
     ports:
-      - "$MARIADB_PORT:3306"
+      - "3306:3306"
     volumes:
-      - $DOCKERDIR/appdata/mariadb/data:/var/lib/mysql
-      - $DOCKERDIR/appdata/mariadb/config:/etc/mysql
+      - ./appdata/mariadb/data:/var/lib/mysql
+      - ./appdata/mariadb/config:/etc/mysql
     environment:
       MARIADB_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root_password
     secrets:

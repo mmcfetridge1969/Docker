@@ -1,27 +1,19 @@
-version: '2.1'
+
 services:
   trilium:
     image: zadam/trilium
     restart: always
     environment:
-      - TRILIUM_DATA_DIR=/home/node/trilium-data
+      - ./trilium/data=/home/node/trilium-data
     volumes:
-      - /home/ubuntu/docker/trilium:/home/node/trilium-data
-    networks:
-      proxy:
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.trilium.entrypoints=http"
-      - "traefik.http.routers.trilium.rule=Host(`trilium.yourdomain.com`)"
-      - "traefik.http.middlewares.trilium-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.trilium.middlewares=trilium-https-redirect"
-      - "traefik.http.routers.trilium-secure.entrypoints=https"
-      - "traefik.http.routers.trilium-secure.rule=Host(`trilium.yourdomain.com`)"
-      - "traefik.http.routers.trilium-secure.tls=true"
-      - "traefik.http.routers.trilium-secure.service=trilium"
-      - "traefik.http.services.trilium.loadbalancer.server.port=8080"
-      - "traefik.docker.network=proxy"
+      - ./trilium:/home/node/trilium-data
+    ports:
+      - 8180:8080
 
-networks:
-  proxy:
-    external: true
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

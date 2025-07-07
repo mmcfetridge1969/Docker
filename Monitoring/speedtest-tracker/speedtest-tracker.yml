@@ -5,15 +5,12 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["apps", "all"]
-    networks:
-      - default
     ports:
-      - "$SPEEDTESTTRACKER_PORT:80"
+      - "8080:80"
     environment:
-      TZ: $TZ
-      PUID: $PUID
-      PGID: $PGID
+      TZ: America/New_York
+      PUID: 1000
+      PGID: 1000
       DB_CONNECTION: sqlite
       APP_KEY: $SPEEDTEST_TRACKER_APP_KEY #optional
       # DB_HOST: mariadb #optional
@@ -22,5 +19,12 @@ services:
       # DB_USERNAME: speedtest_user #optional
       # DB_PASSWORD: ST-DB-PASSWORD-PLACEHOLDER #optional
     volumes:
-      - $DOCKERDIR/appdata/speedtest-tracker:/config
-    # DOCKER-LABELS-PLACEHOLDER
+      - ./appdata/speedtest-tracker:/config
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

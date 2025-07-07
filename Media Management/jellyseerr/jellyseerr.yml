@@ -6,14 +6,18 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["apps", "all"]
-    networks:
-      - default
     ports:
-      - "$JELLYSEERR_PORT:5055"
+      - "5055:5055"
     volumes:
-      - $DOCKERDIR/appdata/jellyseerr:/app/config
+      - ./jellyseerr:/app/config
     environment:
-      TZ: $TZ
+      TZ: America/New_York
       LOG_LEVEL: info
-    # DOCKER-LABELS-PLACEHOLDER
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

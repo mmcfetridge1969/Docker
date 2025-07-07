@@ -1,0 +1,30 @@
+services:
+  # Airsonic Advanced - Music Server
+  airsonic-advanced:
+    image: lscr.io/linuxserver/airsonic-advanced
+    container_name: airsonic-advanced
+    security_opt:
+      - no-new-privileges:true
+    restart: "no"
+    volumes:
+      - ./appdata/airsonic-advanced/podcasts:/data/podcasts
+      - ./appdata/airsonic-advanced/playlists:/data/playlists
+      - ./appdata/airsonic-advanced/config:/config
+      # - $MEDIADIR1:/data/media1
+      # - $MEDIADIR2:/data/media2
+      # - $MEDIADIR3:/data/media3
+    ports:
+      - "4040:4040"
+    environment:
+      TZ: Americca/New_York
+      PUID: 1000
+      PGID: 1000
+      JAVA_OPTS: '-Dserver.forward-headers-strategy=native' # optional - if you use a reverse-proxy
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

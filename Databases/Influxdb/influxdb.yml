@@ -6,12 +6,18 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["dbs", "all"]
     networks:
       - default
     ports:
-      - "$INFLUXDB_PORT:8086"
+      - "8086:8086"
     volumes:
-      - $DOCKERDIR/appdata/influxdb2/config:/etc/influxdb2
-      - $DOCKERDIR/appdata/influxdb2/db:/var/lib/influxdb2
-    # DOCKER-LABELS-PLACEHOLDER
+      - ./appdata/influxdb2/config:/etc/influxdb2
+      - ./appdata/influxdb2/db:/var/lib/influxdb2
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

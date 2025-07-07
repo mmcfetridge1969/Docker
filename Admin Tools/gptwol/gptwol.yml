@@ -6,18 +6,25 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["apps", "all"]
     network_mode: host
     stdin_open: true
     tty: true
     environment:
-      - PUID=$PUID
-      - PGID=$PGID
-      - TZ=$TZ
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
       - PORT=$GPTWOL_PORT # default port is 5000
       - REFRESH_PING=60 # in seconds
       # - PING_TIMEOUT=200 # in milliseconds
     volumes:
-      - $DOCKERDIR/appdata/gptwol/computers.txt:/app/computers.txt
-      - $DOCKERDIR/appdata/gptwol/cron:/etc/cron.d      
-    # DOCKER-LABELS-PLACEHOLDER
+      - ./appdata/gptwol/computers.txt:/app/computers.txt
+      - ./appdata/gptwol/cron:/etc/cron.d      
+  
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

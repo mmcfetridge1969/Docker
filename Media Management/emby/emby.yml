@@ -1,0 +1,32 @@
+services:
+  # Emby - Media Server
+  emby:
+    image: emby/embyserver:latest
+    container_name: emby
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "8096:8096"
+      - "8920:8920"
+    # DEVICES-GPU-PLACEHOLDER-DO-NOT-DELETE
+    volumes:
+      - ./appdata/emby:/config
+      - ./appdata/downloads:/data/downloads
+      # - $MEDIADIR1:/data/media1
+      # - $MEDIADIR2:/data/media2
+      # - $MEDIADIR3:/data/media3
+      - /dev/shm:/data/transcode
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      TZ: America/New_York
+      HOSTNAME: "$EMBY_SERVER_NAME"
+      UID: 1000
+      GID: 1000    
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

@@ -6,9 +6,16 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["apps", "all"]
     networks:
       - default
     ports:
-      - "$CYBERCHEF_PORT:8000"
-    # DOCKER-LABELS-PLACEHOLDER
+      - "8000:8000"
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+

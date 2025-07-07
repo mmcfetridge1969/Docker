@@ -6,15 +6,21 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["apps", "all"]
     networks:
       - default
     depends_on:
       redis:
         condition: service_healthy
     ports:
-      - "$REDISCOMMANDER_PORT:8081"
+      - "8081:8081"
     environment:
       - REDIS_HOST=redis
       # - REDIS_PASSWORD=$REDIS_PASSWORD
-    # DOCKER-LABELS-PLACEHOLDER
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

@@ -1,7 +1,4 @@
 ---
-volumes:
-  uptimekuma-data:
-    driver: local
 services:
   uptimekuma:
     image: docker.io/louislam/uptime-kuma:1.23.13
@@ -9,5 +6,13 @@ services:
     ports:
       - 3001:3001
     volumes:
-      - uptimekuma-data:/app/data
+      - ./uptimekuma-data:/app/data
     restart: unless-stopped
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

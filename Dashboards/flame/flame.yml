@@ -6,16 +6,24 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["apps", "all"]
     networks:
       - default
       - socket_proxy
     ports:
-      - $FLAME_PORT:5005
+      - 5005:5005
     volumes:
-      - $DOCKERDIR/appdata/flame:/app/data
+      - ./appdata/flame:/app/data
       # - /var/run/docker.sock:/var/run/docker.sock # optional but required for Docker integration
     environment:
       - PASSWORD=$FLAME_PASSWORD # optional but required for (1)
       - DOCKER_HOST
-    # DOCKER-LABELS-PLACEHOLDER
+
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+

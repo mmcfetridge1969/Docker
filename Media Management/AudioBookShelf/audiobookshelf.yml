@@ -1,0 +1,24 @@
+services:
+  # Audiobookshelf - Audiobook Server
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    user: 1000:1000
+    ports:
+      - "8080:80"
+    volumes:
+      - ./appdata/audiobooks:/audiobooks
+      - ./appdata/podcast:/podcasts
+      - ./appdata/audiobookshelf/metadata:/metadata
+      - ./appdata/audiobookshelf/config:/config
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

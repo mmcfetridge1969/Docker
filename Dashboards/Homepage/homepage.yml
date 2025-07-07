@@ -6,17 +6,16 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["apps", "all"]
     networks:
       - default
       - socket_proxy
     ports:
-      - "$HOMEPAGE_PORT:3000" 
+      - "3000:3000" 
     volumes:
-      - $DOCKERDIR/appdata/homepage:/app/config
+      - ./config:/app/config
     environment:
-      TZ: $TZ
-      PUID: $PUID
-      PGID: $PGID
+      TZ: America/New_York
+      PUID: 1000
+      PGID: 1000
       HOMEPAGE_ALLOWED_HOSTS: "*"
-    # DOCKER-LABELS-PLACEHOLDER
+    

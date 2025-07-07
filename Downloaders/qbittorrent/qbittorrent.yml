@@ -6,17 +6,21 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["apps", "downloads", "all"]
-    networks:
-      - default
     ports:
-      - "$QBITTORRENT_PORT:8080"
+      - "8080:8080"
     volumes:
-      - $DOCKERDIR/appdata/qbittorrent:/config
-      - $DOWNLOADSDIR:/data/downloads # Ensure that downloads folder is set to /data/downloads in qBittorrent
+      - ./appdata/qbittorrent:/config
+      - ./$DOWNLOADS:/data/downloads # Ensure that downloads folder is set to /data/downloads in qBittorrent
     environment:
-      TZ: $TZ
-      PUID: $PUID
-      PGID: $PGID
+      TZ: America/New_York
+      PUID: 1000
+      PGID: 1000
       UMASK_SET: 002
-    # DOCKER-LABELS-PLACEHOLDER
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

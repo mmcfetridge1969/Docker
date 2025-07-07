@@ -6,16 +6,15 @@ services:
     pid: host
     network_mode: host
     restart: unless-stopped
-    profiles: ["monitoring", "all"]
     cap_add:
       - SYS_PTRACE
       - SYS_ADMIN
     security_opt:
       - apparmor:unconfined
     volumes:
-      - $DOCKERDIR/appdata/netdata/config:/etc/netdata
-      - $DOCKERDIR/appdata/netdata/lib:/var/lib/netdata
-      - $DOCKERDIR/appdata/netdata/cache:/var/cache/netdata
+      - ./appdata/netdata/config:/etc/netdata
+      - ./appdata/netdata/lib:/var/lib/netdata
+      - ./appdata/netdata/cache:/var/cache/netdata
       - /:/host/root:ro,rslave
       - /etc/passwd:/host/etc/passwd:ro
       - /etc/group:/host/etc/group:ro
@@ -25,3 +24,11 @@ services:
       - /etc/os-release:/host/etc/os-release:ro
       - /var/log:/host/var/log:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

@@ -42,8 +42,8 @@ services:
       - VPN_SERVICE_PROVIDER=airvpn
       - VPN_TYPE=wireguard
       - FIREWALL_VPN_INPUT_PORTS=29261
-      - WIREGUARD_PRIVATE_KEY=eDgf3GPFy2ltgx2RkD/Vx5wKZ4dVi28YbQmSJOrbWmk=
-      - WIREGUARD_PRESHARED_KEY=+0+hrSdzRUxKDNk1Q37PNmNJ2jsj2EzF45JtbZad4lI=
+      - WIREGUARD_PRIVATE_KEY=enter you private key
+      - WIREGUARD_PRESHARED_KEY=enter your key
       - WIREGUARD_ADDRESSES=10.175.23.30
       - SERVER_COUNTRIES=Canada
       - BLOCK_MALICIOUS=off
@@ -66,8 +66,8 @@ services:
       - WEBUI_PORT=8118
       - TORRENTING_PORT=29261
     volumes:
-      - /home/miker/docker/qbittorrent/config:/config
-      - /home/miker/docker/data/downloads/qbittorrent/completed:/downloads              # This is to be used in settings/downloads "Default Save Path" = /downloads
+      - ./qbittorrent/config:/config
+      - ./data/downloads/qbittorrent/completed:/downloads              # This is to be used in settings/downloads "Default Save Path" = /downloads
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       gluetun:
@@ -103,8 +103,8 @@ services:
       - TZ=America/New_York
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /home/miker/docker/nzbget:/config
-      - /home/miker/docker/data:/data
+      - ./nzbget:/config
+      - ./data:/data
     depends_on:
       gluetun:
         condition: service_healthy
@@ -120,7 +120,7 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /home/miker/docker/prowlarr/config:/config
+      - ./prowlarr/config:/config
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     depends_on:
@@ -138,8 +138,8 @@ services:
       - TZ=America/New_York
       - AUTO_UPDATE=true #optional
     volumes:
-      - /home/miker/docker/jackett/data:/config
-      - /home/miker/docker/data/downloads/qbittorrent/completed:/downloads
+      - ./jackett/data:/config
+      - ./data/downloads/qbittorrent/completed:/downloads
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     depends_on:
@@ -157,9 +157,9 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /home/miker/docker/sonarr/config:/config
-      - /home/miker/docker/data/shows:/data/tv
-      - /home/miker/docker/data/downloads/qbittorrent/completed:/downloads
+      - ./sonarr/config:/config
+      - ./data/shows:/data/tv
+      - ./data/downloads/qbittorrent/completed:/downloads
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 8989:8989
@@ -176,9 +176,9 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /home/miker/docker/radarr/config:/config
-      - /home/miker/docker/data/movies:/data/movies
-      - /home/miker/docker/data/downloads/qbittorrent/completed:/downloads
+      - ./radarr/config:/config
+      - ./data/movies:/data/movies
+      - ./data/downloads/qbittorrent/completed:/downloads
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 7878:7878
@@ -195,9 +195,9 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /home/miker/docker/lidarr/config:/config
-      - /home/miker/docker/data/music:/data/music
-      - /home/miker/docker/data/downloads/qbittorrent/completed:/downloads
+      - ./lidarr/config:/config
+      - ./data/music:/data/music
+      - ./data/downloads/qbittorrent/completed:/downloads
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 8686:8686
@@ -214,9 +214,9 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /home/miker/docker/bazarr/config:/config
-      - /home/miker/docker/data/movies:/data/movies
-      - /home/miker/docker/data/shows:/data/tv
+      - ./bazarr/config:/config
+      - ./data/movies:/data/movies
+      - ./data/shows:/data/tv
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 6767:6767
@@ -234,9 +234,9 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /home/miker/docker/readarr/config:/config
-      - /home/miker/docker/data/books:/data/books
-      - /home/miker/docker/data/downloads/qbittorrent/completed:/downloads
+      - ./readarr/config:/config
+      - ./data/books:/data/books
+      - ./data/downloads/qbittorrent/completed:/downloads
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     networks:
@@ -251,8 +251,8 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /home/miker/docker/huntarr/config:/config
-      - /home/miker/docker/data:/data
+      - ./huntarr/config:/config
+      - ./data:/data
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 9705:9705
@@ -280,7 +280,7 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /home/miker/docker/sqaparr/config:/config
+      - ./sqaparr/config:/config
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     networks:
@@ -295,11 +295,11 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /home/miker/docker/jellyfin/config:/config
-      - /home/miker/docker/jellyfin/data:/data
+      - ./jellyfin/config:/config
+      - ./jellyfin/data:/data
       - /etc/localtime:/etc/localtime:ro
-      - /home/miker/docker/data/shows:/data/tvshows
-      - /home/miker/docker/data/movies:/data/movies
+      - ./data/shows:/data/tvshows
+      - ./data/movies:/data/movies
     ports:
       - 8096:8096
       - 7359:7359/udp #Service Discovery
@@ -317,7 +317,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: "!Sucyetat123"
     volumes:
-      - /home/miker/docker/jellystat/postgres:/var/lib/postgresql/data
+      - ./jellystat/postgres:/var/lib/postgresql/data
       - /etc/localtime:/etc/localtime:ro
     networks:
       servarrnetwork:
@@ -332,7 +332,7 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /home/miker/docker/jellyseerr/config:/app/config
+      - ./jellyseerr/config:/app/config
     restart: unless-stopped
     ports:
       - 5055:5055
@@ -346,13 +346,13 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: "!Sucyetat123"
+      POSTGRES_PASSWORD: "create password"
       POSTGRES_IP: jellystat-db
       POSTGRES_PORT: 5432
-      JWT_SECRET: "!Sucyetat123"
+      JWT_SECRET: "create secret password"
       TZ: America/New_York
     volumes:
-      - /home/miker/docker/jellystat/backup-data:/app/backend/backup-data
+      - ./jellystat/backup-data:/app/backend/backup-data
       - /etc/localtime:/etc/localtime:ro
     ports:
       - "3000:3000"
@@ -367,7 +367,7 @@ services:
     ports:
       - 9445:9443
     volumes:
-      - /home/miker/docker/portainer/data:/data
+      - ./portainer/data:/data
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
@@ -378,10 +378,10 @@ services:
     ports:
       - 13378:80
     volumes:
-      - /home/miker/docker/data/books:/audiobooks
-      - /home/miker/docker/data/podcasts:/podcasts
-      - /home/miker/docker/audiobookshelf/metadata:/metadata
-      - /home/miker/docker/audiobookshelf/config:/config
+      - ./data/books:/audiobooks
+      - ./data/podcasts:/podcasts
+      - ./audiobookshelf/metadata:/metadata
+      - ./audiobookshelf/config:/config
     restart: unless-stopped
 
 #  watchtower:
@@ -397,12 +397,12 @@ services:
 #      WATCHTOWER_INCLUDE_STOPPED: true
 #      WATCHTOWER_NOTIFICATIONS: email
 #      WATCHTOWER_NOTIFICATIONS_HOSTNAME: "Media Stack Server"
-#      WATCHTOWER_NOTIFICATION_EMAIL_FROM: miker@mcfetridge.us
-#      WATCHTOWER_NOTIFICATION_EMAIL_TO: miker@mcfetridge.us
-#      WATCHTOWER_NOTIFICATION_EMAIL_SERVER: mail.mcfetridge.us
+#      WATCHTOWER_NOTIFICATION_EMAIL_FROM: user@yourdomain.us
+#      WATCHTOWER_NOTIFICATION_EMAIL_TO: user@yourdomain.us
+#      WATCHTOWER_NOTIFICATION_EMAIL_SERVER: mail.yourdomain.us
 #      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT: 587
-#      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER: miker@mcfetridge.us
-#      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD: "!Sucyetat123"
+#      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER: user@yourdomain.us
+#      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD: "password"
 #    security_opt:
 #      - no-new-privileges:true
 #    volumes:

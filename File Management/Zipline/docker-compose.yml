@@ -14,8 +14,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      - ziplinedb
+
 
   zipline:
     image: ghcr.io/diced/zipline
@@ -24,7 +23,7 @@ services:
     restart: unless-stopped
     environment:
       - CORE_RETURN_HTTPS=false
-      - CORE_SECRET=CxG69bf3zVVKekGfghBy
+      - CORE_SECRET=Randown secret password
       - CORE_HOST=0.0.0.0
       - CORE_PORT=3000
       - CORE_DATABASE_URL=postgres://postgres:postgres@postgres/postgres
@@ -34,14 +33,4 @@ services:
       - './public:/zipline/public'
     depends_on:
       - 'postgres'
-    networks:
-      - proxy
-      - ziplinedb
-networks:
-  proxy:
-    external: true
-  ziplinedb:
-    external: true
 
-volumes:
-  pg_data:

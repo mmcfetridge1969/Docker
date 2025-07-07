@@ -20,11 +20,11 @@ services:
 
     # Mapping data to the volume created for this service
     volumes:
-      - /home/miker/docker/dashy/data/config/conf.yml:/app/user-data/conf.yml
-      - /home/miker/docker/dashy/png:/app/user-data/icons
+      - ./data/config/conf.yml:/app/user-data/conf.yml
+      - ./png:/app/user-data/icons
     # Set port that web service will be served on. Keep container port as 8080
-#    ports:
-#      - 4000:8080
+    ports:
+      - 4000:8080
 
     # Set any environmental variables
     environment:
@@ -44,13 +44,7 @@ services:
       retries: 3
       start_period: 40s
 
-    networks:
-      - proxy
 
-# Service will be place in the proxy network for NPM security
-networks:
-  proxy:
-    external: true
 
 
 

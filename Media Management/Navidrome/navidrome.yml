@@ -1,0 +1,30 @@
+services:
+  # Navidrome - Music Server
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    security_opt:
+      - no-new-privileges:true
+    restart: "no"
+    ports:
+      - "4533:4533"
+    user: 1000:1000
+    volumes:
+      - ./appdata/navidrome:/data
+      # - $MEDIADIR1:/data/media1
+      # - $MEDIADIR2:/data/media2
+      # - $MEDIADIR3:/data/media3
+    environment:
+      - TZ=America/New_York
+      - ND_SCANSCHEDULE=1h
+      - ND_LOGLEVEL=info
+      - ND_SESSIONTIMEOUT=24h
+      - ND_REVERSEPROXYWHITELIST="0.0.0.0/0"
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

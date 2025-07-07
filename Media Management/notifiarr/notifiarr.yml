@@ -6,19 +6,23 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: "no"
-    profiles: ["media", "all"]
-    networks:
-      - default
     ports:
-      - "$NOTIFIARR_PORT:5454" 
+      - "5454:5454" 
     volumes:
-      - $DOCKERDIR/appdata/notifiarr:/config
+      - ./appdata/notifiarr:/config
       - /var/run/utmp:/var/run/utmp
       - /etc/machine-id:/etc/machine-id
     environment:
       DN_API_KEY: $NOTIFIARR_API_KEY
       #DN_AUTO_UPDATE: off
-      TZ: $TZ
-      PUID: $PUID
-      PGID: $PGID
-    # DOCKER-LABELS-PLACEHOLDER
+      TZ: America/New_York
+      PUID: 1000
+      PGID: 1000
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

@@ -6,21 +6,27 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["monitoring", "all"]
     # privileged: true # Only for VM
     networks:
       - default
       - socket_proxy
     ports:
-      - "$GLANCES_PORT:61208"
+      - "61208:61208"
     pid: host
     volumes:
-      - $DOCKERDIR/appdata/glances/glances.conf:/glances/conf/glances.conf # Use this if you want to add a glances.conf file
-      - $DOCKERDIR:/data/docker:ro
+      - ./appdata/glances/glances.conf:/glances/conf/glances.conf # Use this if you want to add a glances.conf file
+      - ./appdata/data:/data/docker:ro
       # - /var/run/docker.sock:/var/run/docker.sock:ro # Use Docker Socket Proxy instead for improved security
     environment:
       # - GLANCES_OPT="-C /glances/conf/glances.conf --quiet --export influxdb"
       # - GLANCES_OPT="--export influxdb"
       - "GLANCES_OPT=-w"
       - DOCKER_HOST
-    # DOCKER-LABELS-PLACEHOLDER
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

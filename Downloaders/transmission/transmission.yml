@@ -6,21 +6,18 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["apps", "downloads", "all"]
-    networks:
-      - default
     ports:
-      - "$TRANSMISSION_PORT:9091"
+      - "9091:9091"
       - "51413:51413"
       - "51413:51413/udp"
     volumes:
-      - $DOCKERDIR/appdata/transmission:/config
-      - $DOWNLOADSDIR/torrents:/data/downloads
-      - $DOWNLOADSDIR:/data/watch
+      - ./transmission:/config
+      - ./torrents:/data/downloads
+      - ./Downloads:/data/watch
     environment:
-      - PUID=$PUID
-      - PGID=$PGID
-      - TZ=$TZ
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
       - FILE__USER=/run/secrets/transmission_user
       - FILE__PASS=/run/secrets/transmission_pass
       # - TRANSMISSION_WEB_HOME= #optional
@@ -30,4 +27,11 @@ services:
     secrets:
       - transmission_user
       - transmission_pass  
-    # DOCKER-LABELS-PLACEHOLDER
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

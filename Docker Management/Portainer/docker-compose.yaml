@@ -9,11 +9,12 @@ services:
       - ./data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
-    # Network to join in docker which is named below
-    networks:
-      - proxy
 
-# create PROXY network for NPM security. This will allow NPM to see and talk to >
-networks:
-  proxy:
-    external: true
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+

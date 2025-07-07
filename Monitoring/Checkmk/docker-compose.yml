@@ -7,7 +7,7 @@ services:
     ulimits:
       nofile: 1024
     volumes:
-      - /home/miker/docker/checkmk/monitoring:/omd/sites
+      - ./checkmk/monitoring:/omd/sites
       - /etc/localtime:/etc/localtime:ro
     ports:
       - "8080:8000"
@@ -19,14 +19,13 @@ services:
 networks:
     checkmk_network:
 
-
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 # When build is complete, you need to look in the logs for the default username and password.
 
-# Passwd for checkmk - Uv8bJ0nDFxLxXz9qJxe0
 
-# To install the agent on a linux system:
-    # sudo wget http://192.168.0.183:8500/cmk/check_mk/agents/check-mk-agent_2.3.0p7-1_all.deb
-    # sudo dpkg -i check-mk-agent_2.3.0p7-1_all.deb
-
-
-    scp check-mk-agent_2.3.0p7-1_all.deb miker@107.175.245.171 /home/miker

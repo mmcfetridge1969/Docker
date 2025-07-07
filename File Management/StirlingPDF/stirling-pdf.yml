@@ -6,18 +6,23 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["apps", "all"]
-    networks:
-      - default    
+ 
     ports:
-      - "$STIRLINGPDF_PORT:8080" 
+      - "8080:8080" 
     volumes:
-      - $DOCKERDIR/appdata/stirling-pdf/trainingData:/usr/share/tessdata # Required for extra OCR languages
-      - $DOCKERDIR/appdata/stirling-pdf/extraConfigs:/configs
-#      - $DOCKERDIR/appdata/stirling-pdf/customFiles:/customFiles/
-#      - $DOCKERDIR/appdata/stirling-pdf/logs:/logs/
+      - ./appdata/stirling-pdf/trainingData:/usr/share/tessdata # Required for extra OCR languages
+      - ./appdata/stirling-pdf/extraConfigs:/configs
+      - ./appdata/stirling-pdf/customFiles:/customFiles/
+      - ./appdata/stirling-pdf/logs:/logs/
     environment:
       DOCKER_ENABLE_SECURITY: false
       INSTALL_BOOK_AND_ADVANCED_HTML_OPS: false
       LANGS: en_US
-    # DOCKER-LABELS-PLACEHOLDER
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - postgresql-data:/var/lib/postgresql/data
+      - ./postgresql-data:/var/lib/postgresql/data
 
   zabbix-server:
     image: zabbix/zabbix-server-pgsql:latest
@@ -24,9 +24,9 @@ services:
     ports:
       - "10051:10051"
     volumes:
-      - zabbix-server-data:/var/lib/zabbix
-      - zabbix-snmptraps-data:/var/lib/zabbix/snmptraps
-      - zabbix-export-data:/var/lib/zabbix/export
+      - ./zabbix-server-data:/var/lib/zabbix
+      - ./zabbix-snmptraps-data:/var/lib/zabbix/snmptraps
+      - ./zabbix-export-data:/var/lib/zabbix/export
 
   zabbix-web-nginx-pgsql:
     image: zabbix/zabbix-web-nginx-pgsql:latest
@@ -45,7 +45,7 @@ services:
     ports:
       - "${ZABBIX_FRONTEND_PORT}:8080"
     volumes:
-      - zabbix-web-data:/usr/share/zabbix
+      - ./zabbix-web-data:/usr/share/zabbix
 
  zabbix-agent:
     image: zabbix/zabbix-agent:latest
@@ -63,11 +63,12 @@ services:
       - /var/run:/var/run
     privileged: true
 
-volumes:
-  postgresql-data:
-  zabbix-server-data:
-  zabbix-snmptraps-data:
-  zabbix-export-data:
-  zabbix-web-data:
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 

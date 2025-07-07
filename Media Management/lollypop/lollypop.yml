@@ -1,0 +1,30 @@
+services:
+  # Lollypop - Music Player
+  lollypop:
+    image: lscr.io/linuxserver/lollypop:latest
+    container_name: lollypop
+    security_opt:
+      - no-new-privileges:true
+      - seccomp:unconfined #optional
+    restart: "unless-stopped"
+    # DEVICES-GPU-PLACEHOLDER-DO-NOT-DELETE
+    ports:
+      - "3000:3000" # HTTP
+    #   - 3001:3001 # HTTPS
+    volumes:
+      - ./appdata/lollypop:/config
+      # - $MEDIADIR1:/data/media1
+      # - $MEDIADIR2:/data/media2
+      # - $MEDIADIR3:/data/media3
+    environment:
+      TZ: America/New_York
+      PUID: 1000
+      PGID: 1000
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

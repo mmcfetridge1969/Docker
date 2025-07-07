@@ -18,9 +18,11 @@ services:
       - /dev/dri:/dev/dri #optional
     shm_size: "1gb"
     restart: always
-    # used to place in the NPM / traefik network so they can talk with each other.
-    networks:
-      - proxy
-networks:
-  proxy:
-    external: true
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

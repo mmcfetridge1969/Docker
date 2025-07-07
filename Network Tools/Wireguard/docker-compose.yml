@@ -5,8 +5,8 @@ services:
     container_name: wireguard       # Name of the container.
     environment:                    # Environment variables to configure the ins>
       - LANG=en                     # Language settings.
-      - WG_HOST=wireguard.mikemcfetridge.com      # Public IP or domain name whe>
-      - PASSWORD=!Sucyetat123         # Password for accessing the WG-Easy web i>
+      - WG_HOST=wireguard.yourdomain.com      # Public IP or domain name whe>
+      - PASSWORD=Create Password         # Password for accessing the WG-Easy web i>
       - PORT=51821                  # Port for the web interface.
       - WG_PORT=51820               # WireGuard port for VPN traffic.
     volumes:
@@ -22,11 +22,11 @@ services:
       - net.ipv4.ip_forward=1
     restart: unless-stopped         # Ensures the container restarts automatical>
 
-# Network to join in docker which is named below
-    networks:
-      - proxy
 
-# create PROXY network for NPM security. This will allow NPM to see and talk to >
-networks:
-  proxy:
-    external: true
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

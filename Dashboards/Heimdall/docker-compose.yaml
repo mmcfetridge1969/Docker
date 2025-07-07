@@ -1,0 +1,22 @@
+---
+services:
+  heimdall:
+    image: lscr.io/linuxserver/heimdall:2.6.1
+    container_name: heimdall
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./heimdall/config:/config
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

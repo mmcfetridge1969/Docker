@@ -6,22 +6,25 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: "no"
-    profiles: ["media", "all"]
-    networks:
-      - default
-    user: $PUID:$PGID
+    user: 1000:1000
     # DEVICES-GPU-PLACEHOLDER-DO-NOT-DELETE
     ports:
-      - "$JELLYFIN_PORT:8096"
-      # - "8920:8920" # Emby also uses same port if running both
+      - "8096:8096"
     environment:
       UMASK_SET: 022
-      TZ: $TZ
+      TZ: America/New_York
     volumes:
-      - $DOCKERDIR/appdata/jellyfin:/config
-      - $DOWNLOADSDIR:/data/downloads
+      - ./appdata/jellyfin:/config
+      - ./Downloads:/data/downloads
       # - $MEDIADIR1:/data/media1
       # - $MEDIADIR2:/data/media2
       # - $MEDIADIR3:/data/media3
       - /dev/shm:/data/transcode # Offload transcoding to RAM if you have enough RAM
-    # DOCKER-LABELS-PLACEHOLDER
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

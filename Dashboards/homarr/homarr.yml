@@ -6,17 +6,23 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["apps", "all"]
     networks:
       - default
       - socket_proxy
     ports:
-      - "$HOMARR_PORT:7575"
+      - "7575:7575"
     volumes:
-      # - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
-      - $DOCKERDIR/appdata/homarr/configs:/app/data/configs
-      - $DOCKERDIR/appdata/homarr/icons:/app/public/icons
-      - $DOCKERDIR/appdata/homarr/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
+      - ./configs:/app/data/configs
+      - ./icons:/app/public/icons
+      - ./data:/data
     environment:
       - DOCKER_HOST
-    # DOCKER-LABELS-PLACEHOLDER
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

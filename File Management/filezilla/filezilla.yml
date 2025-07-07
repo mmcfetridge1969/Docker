@@ -7,17 +7,21 @@ services:
       - no-new-privileges:true
       - seccomp:unconfined #optional
     restart: "unless-stopped"
-    profiles: ["apps", "all"]
-    networks:
-      - default
     # DEVICES-GPU-PLACEHOLDER-DO-NOT-DELETE
     ports:
-      - "$FILEZILLA_PORT:3000" # HTTP
+      - "3000:3000" # HTTP
       # - 3001:3001 # HTTPS
     volumes:
-      - $DOCKERDIR/appdata/filezilla:/config
+      - ./appdata/filezilla:/config
     environment:
-      TZ: $TZ
-      PUID: $PUID
-      PGID: $PGID
-    # DOCKER-LABELS-PLACEHOLDER
+      TZ: America/New_York
+      PUID: 1000
+      PGID: 1000
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

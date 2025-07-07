@@ -63,7 +63,7 @@ pages:
       - size: small
         widgets:
           - type: weather
-            location: Bealeton, Virginia, United States
+            location: New York, New York, United States
             units: imperial
             hour-format: 12h # alternatively "24h"
 
@@ -83,34 +83,6 @@ pages:
                 name: Google
               - symbol: AMD
                 name: AMD
-
-          - type: custom-api
-            title: Immich stats
-            cache: 1d
-            url: http://192.168.2.13:2283/api/server/statistics
-            headers:
-              x-api-key: fYDkorU0ik0xOOvfwGiuYtcHWZmggaNYfvHARDTdWo
-              Accept: application/json
-            template: |
-              <div class="flex justify-between text-center">
-                <div>
-                    <div class="color-highlight size-h3">{{ .JSON.Int "photos" | formatNumber }}</div>
-                    <div class="size-h6">PHOTOS</div>
-                </div>
-                <div>
-                    <div class="color-highlight size-h3">{{ .JSON.Int "videos" | formatNumber }}</div>
-                    <div class="size-h6">VIDEOS</div>
-                </div>
-                <div>
-                    <div class="color-highlight size-h3">{{ div (.JSON.Int "usage" | toFloat) 1073741824 | toInt | formatNumber }}GB</div>
-                    <div class="size-h6">USAGE</div>
-                </div>
-              </div>
-          - type: repository
-            repository: mmcfetridge1969/Docker
-            pull-requests-limit: 5
-            issues-limit: 3
-            commits-limit: 3
 
   - name: Monitoring
     # Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
@@ -139,18 +111,18 @@ pages:
                 icon: di:proxmox
 
               - title: Jellyfin
-                url: https://jellyfin.mikemcfetridge.com
-                check-url: http://192.168.2.16:8096
+                url: https://jellyfin.yourdomain.com
+                check-url: http://192.168.2.16:18096
                 icon: di:jellyfin
 
               - title: Nextcloud
-                url: https://nextcloud.mikemcfetridge.com
-                check-url: https://nextcloud.mikemcfetridge.com
+                url: https://nextcloud.yourdomain.com
+                check-url: https://nextcloud.yourdomain.com
                 icon: di:nextcloud
 
               - title: Immich
-                url: https://immich.mikemcfetridge.com
-                check-url: http://192.168.2.13:2283/
+                url: https://immich.yourdomain.com
+                check-url: http://192.168.2.13:12283/
                 icon: di:immich
 
               - title: Adguard
@@ -159,93 +131,24 @@ pages:
                 icon: di:adguard
 
               - title: Vaultwarden
-                url: https://vault.mikemcfetridge.com/
-                check-url: http://192.168.2.13:12000
+                url: https://vault.yourdomain.com/
+                check-url: http://192.168.2.13:10000
                 icon: di:vaultwarden-light
 
               - title: NGINX Proxy Manager
-                url: https://proxy.mikemcfetridge.com/
+                url: https://proxy.yourdomain.com/
                 check-url: http://192.168.2.7:81/
                 icon: di:nginx
 
-              - title: Wireguard
-                url: https://wireguard.mikemcfetridge.com/
-                check-url: http://192.168.2.7:51821/
-                icon: di:wireguard
-
               - title: Dashy
-                url: https://dashy.mikemcfetridge.com/
+                url: https://dashy.yourdomain.com/
                 check-url: http://192.168.2.7:4000/
                 icon: di:wireguard
 
               - title: Gitea
-                url: https://gitea.mikemcfetridge.com/
-                check-url: http://192.168.2.7:3000/
+                url: https://gitea.yourdomain.com/
+                check-url: http://192.168.2.7:5000/
                 icon: di:gitea
-
-              - title: IT-Tools
-                url: https://ittools.mikemcfetridge.com/
-                check-url: http://192.168.2.7:8089/
-                icon: di:it-tools
-
-              - title: Mealie
-                url: https://mealie.mikemcfetridge.com/
-                check-url: http://192.168.2.7:9925/
-                icon: di:mealie
-
-              - title: Net Alert
-                url: http://192.168.2.7:20211/
-                check-url: http://192.168.2.7:20211/
-                icon: di:netalert
-
-              - title: Trilium Notes
-                url: https://trilium.mikemcfetridge.com
-                check-url: http://192.168.2.7:8080/
-                icon: di:netalert
-
-              - title: Wallabag
-                url: https://wall.mikemcfetridge.com
-                check-url: http://192.168.2.13:8667/
-                icon: di:wallabag
-
-              - title: Pi-Hole
-                url: http://192.168.2.13:500/admin
-                check-url: http://192.168.2.13:500/admin
-                icon: di:pi-hole
-
-              - title: Immich
-                url: https://immich.mikemcfetridge.com
-                check-url: http://192.168.2.13:2283/
-                icon: di:immich
-              - title: Searxng
-                url: https://search.mikemcfetridge.com
-                check-url: http://192.168.2.13:8080/
-                icon: di:searxng
-
-              - title: Authentik
-                url: https://authentik.mikemcfetridge.com
-                check-url: https://authentik.mikemcfetridge.com
-                icon: di:authentik
-
-              - title: Portainer-1
-                url: https://port.mikemcfetridge.com
-                check-url: https://192.168.2.7:9445
-                icon: di:portainer
-
-              - title: Portainer-2
-                url: https://192.168.2.13:9445
-                check-url: https://192.168.2.13:9445
-                icon: di:portainer
-
-              - title: NPM Proxy
-                url: https://proxy.mikemcfetridge.com
-                check-url: http://192.168.2.7:81
-                icon: di:nginx-proxy-manager
-
-              - title: DumbAssets
-                url: http://192.168.2.4:3001/
-                check-url: http://192.168.2.4:3001/
-                icon: di:dumcassets
 
           - type: monitor
             cache: 1m
@@ -286,16 +189,6 @@ pages:
                 url: http://192.168.2.16:9696
                 check-url: http://192.168.2.16:9696
                 icon: di:prowlarr
-
-              - title: qBittorrent
-                url: http://192.168.2.16:8118
-                check-url: http://192.168.2.16:8118
-                icon: di:qbittorrent
-
-              - title: Audio Book Shelf
-                url: https://audio.mikemcfetridge.com
-                check-url: http://192.168.2.16:13378
-                icon: di:audiobookshelf
 
       - size: small
         widgets:
