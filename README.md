@@ -132,3 +132,4 @@
 - **OpenHands**: An open-source AI platform for hand gesture recognition.
 - **Searxng**: A privacy-respecting metasearch engine that aggregates results from multiple search engines.
 - **Qdrant**: A vector database and search engine.
+
