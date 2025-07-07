@@ -3,9 +3,9 @@ services:
     container_name: immich_server
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
     volumes:
-      - /home/miker/dockerapps/immich/upload:/usr/src/app/upload
+      - ./immich/upload:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
-      - /home/miker/docker/immich/upload/import:/import
+      - ./immich/upload/import:/import
     env_file:
       - .env
     ports:
@@ -15,6 +15,14 @@ services:
       - database
     restart: always
 
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
   immich-microservices:
     container_name: immich_microservices
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION}
@@ -23,7 +31,7 @@ services:
       service: hwaccel
     command: [ "start.sh", "microservices" ]
     volumes:
-      - /home/miker/dockerapps/immich/upload:/usr/src/app/upload
+      - ./immich/upload:/usr/src/app/upload
     env_file:
       - .env
     depends_on:
@@ -31,19 +39,43 @@ services:
       - database
     restart: always
 
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
   immich-machine-learning:
     container_name: immich_machine_learning
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
     volumes:
-      - /home/miker/dockerapps/immich/model-cache:/cache
+      - ./immich/model-cache:/cache
     env_file:
       - .env
     restart: always
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   redis:
     container_name: immich_redis
     image: redis:6.2-alpine@sha256:70a7a5b641117670beae0d80658430853896b5ef269ccf00d1827427e3263fa3
     restart: always
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   database:
     container_name: immich_postgres
@@ -56,5 +88,30 @@ services:
       POSTGRES_DB: ${DB_DATABASE_NAME}
       POSTGRES_INITDB_ARGS: '--data-checksums'
     volumes:
-      - /home/miker/dockerapps/immich/pgdata:/var/lib/postgresql/data
+      - ./immich/pgdata:/var/lib/postgresql/data
     restart: always
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  hwaccel:
+    devices:
+      - /dev/dri:/dev/dri  # If using Intel QuickSync or VAAPI
+    # volumes:
+    #   - /usr/lib/wsl:/usr/lib/wsl # If using VAAPI in WSL2
+    # environment:
+    #   - NVIDIA_DRIVER_CAPABILITIES=all # If using NVIDIA GPU
+    #   - LD_LIBRARY_PATH=/usr/lib/wsl/lib # If using VAAPI in WSL2
+    #   - LIBVA_DRIVER_NAME=d3d12 # If using VAAPI in WSL2
+    # deploy: # Uncomment this section if using NVIDIA GPU
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu,video]

@@ -1,8 +1,4 @@
 ---
-volumes:
-  passbolt-db:
-  passbolt-data-gpg:
-  passbolt-data-jwt:
 services:
   passbolt-db:
     container_name: passbolt-db
@@ -13,8 +9,17 @@ services:
       - MYSQL_USER=$PASSBOLT_DB_USER
       - MYSQL_PASSWORD=$PASSBOLT_DB_PASS
     volumes:
-      - passbolt-db:/var/lib/mysql
+      - ./passbolt-db:/var/lib/mysql
     restart: unless-stopped
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
   passbolt:
     container_name: passbolt-app
     image: docker.io/passbolt/passbolt:4.8.0-1-ce
@@ -33,7 +38,15 @@ services:
       - EMAIL_TRANSPORT_DEFAULT_TLS=true
       - EMAIL_DEFAULT_FROM=no-reply@domain.tld
     volumes:
-      - passbolt-data-gpg:/etc/passbolt/gpg
-      - passbolt-data-jwt:/etc/passbolt/jwt
+      - ./passbolt-data-gpg:/etc/passbolt/gpg
+      - ./passbolt-data-jwt:/etc/passbolt/jwt
     command: ["/usr/bin/wait-for.sh", "-t", "0", "passbolt-db:3306", "--", "/docker-entrypoint.sh"]
     restart: unless-stopped
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

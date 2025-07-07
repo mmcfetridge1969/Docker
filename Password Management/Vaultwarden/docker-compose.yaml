@@ -6,15 +6,15 @@ services:
     restart: unless-stopped
     volumes:
       - ./data/:/data/
-#    ports:
-#      - 8780:80
+    ports:
+      - 8780:80
     environment:
-      - DOMAIN=https://vault.mikeandrebel.com
+      - DOMAIN=https://vault.yourdomain.com
       - LOGIN_RATELIMIT_MAX_BURST=10
       - LOGIN_RATELIMIT_SECONDS=60
       - ADMIN_RATELIMIT_MAX_BURST=10
       - ADMIN_RATELIMIT_SECONDS=60
-      - ADMIN_TOKEN=kane9RVtkbgu3j0NNZiAOA1mQ
+      - ADMIN_TOKEN=secret password
       - SENDS_ALLOWED=true
       - EMERGENCY_ACCESS_ALLOWED=true
       - WEB_VAULT_ENABLED=true
@@ -22,17 +22,20 @@ services:
       - SIGNUPS_VERIFY=false
       - SIGNUPS_VERIFY_RESEND_TIME=3600
       - SIGNUPS_VERIFY_RESEND_LIMIT=5
-      - SIGNUPS_DOMAINS_WHITELIST=aol.com,mcfetridge.us
-      - SMTP_HOST=mail.mcfetridge.us
-      - SMTP_FROM=miker@mcfetridge.us
+      - SIGNUPS_DOMAINS_WHITELIST=domain.com,domain2.us
+      - SMTP_HOST=mail.yourdomain.com
+      - SMTP_FROM=user@yourdomain.com
       - SMTP_FROM_NAME=Vaultwarden
       - SMTP_SECURITY=starttls
       - SMTP_PORT=587
-      - SMTP_USERNAME=miker@mcfetridge.us
-      - SMTP_PASSWORD="!Sucyetat123"
+      - SMTP_USERNAME=user@youdomain.com
+      - SMTP_PASSWORD="password"
       - SMTP_AUTH_MECHANISM="Login"
-    networks:
-      - proxy
-networks:
-  proxy:
-    external: true
+
+    # Configure healthchecks
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

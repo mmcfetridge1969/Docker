@@ -4,37 +4,49 @@ services:
     restart: unless-stopped
     container_name: wallabag
     environment:
-      - MYSQL_ROOT_PASSWORD=HiEKm6rdUfxz59
+      - MYSQL_ROOT_PASSWORD=create Password
       - SYMFONY__ENV__DATABASE_DRIVER=pdo_mysql
       - SYMFONY__ENV__DATABASE_HOST=db
       - SYMFONY__ENV__DATABASE_PORT=3306
       - SYMFONY__ENV__DATABASE_NAME=wallabag
       - SYMFONY__ENV__DATABASE_USER=wallabag
-      - SYMFONY__ENV__DATABASE_PASSWORD=NfoSdkaavxR4C5
+      - SYMFONY__ENV__DATABASE_PASSWORD=Creat Password
       - SYMFONY__ENV__DATABASE_CHARSET=utf8mb4
       - SYMFONY__ENV__DATABASE_TABLE_PREFIX="wallabag_"
       - SYMFONY__ENV__MAILER_DSN=smtp://127.0.0.1
-      - SYMFONY__ENV__FROM_EMAIL=mmcfetridg@ol.com
-      - SYMFONY__ENV__DOMAIN_NAME=https://wall.mikemcfetridge.com
+      - SYMFONY__ENV__FROM_EMAIL=Your Email
+      - SYMFONY__ENV__DOMAIN_NAME=https://wall.YourDomain.com
       - SYMFONY__ENV__SERVER_NAME="wallabag"
     ports:
       - "8667:80"
     volumes:
-      - /home/miker/dockerapps/wallabag/images:/var/www/wallabag/web/assets/images
+      - ./wallabag/images:/var/www/wallabag/web/assets/images
     depends_on:
       - db
       - redis
+    
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
   db:
     image: mariadb
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=HiEKm6rdUfxz59
+      - MYSQL_ROOT_PASSWORD=Create Password
     volumes:
-      - /home/miker/dockerapps/wallabag/data:/var/lib/mysql
+      - ./wallabag/data:/var/lib/mysql
+    
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 20s
-      timeout: 3s
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
   redis:
     image: redis:alpine
     restart: unless-stopped    
@@ -42,3 +54,10 @@ services:
       test: ["CMD", "redis-cli", "ping"]
       interval: 20s
       timeout: 3s
+    
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s      

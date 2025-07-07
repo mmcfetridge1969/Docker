@@ -6,14 +6,11 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["apps", "all"]
-    networks:
-      - default
     depends_on:
       mariadb:
         condition: service_healthy
     ports:
-      - "$GUACAMOLE_PORT:8080"
+      - "8080:8080"
     environment:
       GUACD_HOSTNAME: guacd
       MYSQL_HOSTNAME: mariadb
@@ -24,4 +21,24 @@ services:
     secrets:
       - guac_mariadb_user
       - guac_mariadb_password
-    # DOCKER-LABELS-PLACEHOLDER
+    
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  guacd:
+    image: guacamole/guacd
+    container_name: guacd
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+        
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

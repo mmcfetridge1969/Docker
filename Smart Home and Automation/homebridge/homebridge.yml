@@ -6,8 +6,12 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["apps", "all"]
-    network_mode: host
     volumes:
-      - $DOCKERDIR/appdata/homebridge:/homebridge
-    # DOCKER-LABELS-PLACEHOLDER
+      - ./appdata/homebridge:/homebridge
+    
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

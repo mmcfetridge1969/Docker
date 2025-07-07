@@ -6,18 +6,21 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    profiles: ["core", "all"]
-    networks:
-      - default
     # DEVICES-GPU-PLACEHOLDER-DO-NOT-DELETE
     ports:
-      - "$REMMINA_PORT:3000" 
+      - "3000:3000" 
       # - "3001:3001" # HTTPS
     volumes:
-      - $DOCKERDIR/appdata/remmina:/config
+      - ./appdata/remmina:/config
     environment:
-      PUID: $PUID
-      PGID: $PGID
-      TZ: $TZ
+      PUID: 1000
+      PGID: 1000
+      TZ: America/New_York
       # DRINODE: /dev/dri/renderD128 
-    # DOCKER-LABELS-PLACEHOLDER
+    
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

@@ -11,16 +11,14 @@ services:
       DB_MYSQL_HOST: "db"
       DB_MYSQL_PORT: 3306
       DB_MYSQL_USER: "npmuser1"                       # Change DB user name
-      DB_MYSQL_PASSWORD: "hFThAaIjIdKypvMkD62F2D"     # Change password and make it long and strong
+      DB_MYSQL_PASSWORD: "Create Password"     # Change password and make it long and strong
       DB_MYSQL_NAME: "npm1"
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
     depends_on:
       - db
-    networks:
-      - proxy
-      - proxydb
+
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:81"]
       interval: 30s
@@ -33,18 +31,17 @@ services:
     container_name: npm-db
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: 'hFThAaIjIdKypvMkD62F2D'   # Change root password and make it strong
+      MYSQL_ROOT_PASSWORD: 'Create Password'   # Change root password and make it strong
       MYSQL_DATABASE: 'npm1'
       MYSQL_USER: 'npmuser1'                          # change username to match what you changed it to in above
-      MYSQL_PASSWORD: 'hFThAaIjIdKypvMkD62F2D'        # change password to match what you changed it to in above
+      MYSQL_PASSWORD: 'Create Password'        # change password to match what you changed it to in above
       MARIADB_AUTO_UPGRADE: '1'
     volumes:
-      - /home/miker/docker/npm/mysql:/var/lib/mysql
-    networks:
-      - proxydb
-
-networks:
-  proxy:
-    external: true
-  proxydb:
-    external: true
+      - ./npm/mysql:/var/lib/mysql
+    
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

@@ -7,8 +7,8 @@ services:
         ports:
             - 8086:443  #MeshCentral will moan and try everything not to use port 80, but you can also use it if you so desire, just change the config.json according to your needs
         environment:
-            - HOSTNAME=mesh.mikeandrebel.com     #your hostname
-            - REVERSE_PROXY=107.175.245.171     #set to your reverse proxy IP if you want to put meshcentral behind a reverse proxy
+            - HOSTNAME=mesh.yourdomain.com     #your hostname
+            - REVERSE_PROXY=192.168.4.4     #set to your reverse proxy IP if you want to put meshcentral behind a reverse proxy
             - REVERSE_PROXY_TLS_PORT=443
             - IFRAME=false    #set to true if you wish to enable iframe support
             - ALLOW_NEW_ACCOUNTS=false    #set to false if you want disable self-service creation of new accounts besides the first (admin)
@@ -21,3 +21,10 @@ services:
             - ./data:/opt/meshcentral/meshcentral-data    #config.json and other important files live here. A must for data persistence
             - ./user_files:/opt/meshcentral/meshcentral-files    #where file uploads for users live
             - ./backups:/opt/meshcentral/meshcentral-backups     #Backups location
+    
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

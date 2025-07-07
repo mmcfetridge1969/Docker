@@ -5,23 +5,26 @@ services:
     container_name: kasm
     privileged: true
     restart: unless-stopped
-    profiles: ["apps", "all"]
-    networks:
-      - default
     # DEVICES-GPU-PLACEHOLDER-DO-NOT-DELETE
     ports:
-      - "$KASM_INSTALLATION_PORT:3000" # Installation Wizard HTTPS
-      - "$KASM_PORT:443" # Web HTTPS
+      - "3000:3000" # Installation Wizard HTTPS
+      - "3443:443" # Web HTTPS
     volumes:
-      - $DOCKERDIR/appdata/kasm/data:/opt
-      - $DOCKERDIR/appdata/kasm/profiles:/profiles #optional
+      - ./appdata/kasm/data:/opt
+      - ./appdata/kasm/profiles:/profiles #optional
       - /dev/input:/dev/input #optional
       - /run/udev/data:/run/udev/data #optional
     environment:
-      TZ: $TZ
+      TZ: America/New_York
       KASM_PORT: 443
       # DOCKER_HUB_USERNAME: USER #optional
       # DOCKER_HUB_PASSWORD: PASS #optional
       # DOCKER_MTU: 1500 #optional
       UMASK: 022
-    # DOCKER-LABELS-PLACEHOLDER
+    
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
