@@ -1,49 +1,79 @@
+---
 services:
-  server:
+  db:
+    image: mysql:8
+    container_name: gitea-db
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - gitea
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u${MYSQL_USER} -p${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  gitea:
     image: gitea/gitea:latest
     container_name: gitea
+    restart: unless-stopped
+    env_file: .env
     environment:
       - USER_UID=1000
       - USER_GID=1000
-      - GITEA__database__DB_TYPE=mysql
-      - GITEA__database__HOST=db:3306
-      - GITEA__database__NAME=gitea
-      - GITEA__database__USER=giteaadmin
-      - GITEA__database__PASSWD=Your Password
-    restart: always
-    volumes:
-      - ./gitea/data:/data
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
+      - GITEA_APP_NAME=${GITEA_APP_NAME}
+      - GITEA__database__DB_TYPE=${GITEA__database__DB_TYPE}
+      - GITEA__database__HOST=${GITEA__database__HOST}
+      - GITEA__database__NAME=${GITEA__database__NAME}
+      - GITEA__database__USER=${GITEA__database__USER}
+      - GITEA__database__PASSWD=${GITEA__database__PASSWD}
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
       - "3000:3000"
       - "222:22"
-    depends_on:
-      - db
-
-    # Configure healthchecks
-    healthcheck:
-      test: ['CMD', 'node', '/app/services/healthcheck']
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-
-  db:
-    image: mysql:8
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=Your Password
-      - MYSQL_USER=giteaadmin
-      - MYSQL_PASSWORD=Your Passowrd
-      - MYSQL_DATABASE=gitea
     volumes:
-      - ./gitea/mysql:/var/lib/mysql
-
-    # Configure healthchecks
+      - ./gitea:/data
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - gitea
     healthcheck:
-      test: ['CMD', 'node', '/app/services/healthcheck']
-      interval: 1m30s
-      timeout: 10s
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 10s
       retries: 3
-      start_period: 40s
+      timeout: 10s
+      start_period: 30s
+
+  runner:
+    image: gitea/act_runner:latest
+    container_name: gitea-runner
+    restart: unless-stopped
+    depends_on:
+      gitea:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      - GITEA_INSTANCE_URL=${GITEA_INSTANCE_URL}
+      - GITEA_RUNNER_REGISTRATION_TOKEN=${GITEA_RUNNER_REGISTRATION_TOKEN}
+      - GITEA_RUNNER_NAME=${GITEA_RUNNER_NAME}
+      - GITEA_RUNNER_LABELS=${GITEA_RUNNER_LABELS}
+      - GITEA_RUNNER_LOG_LEVEL=trace
+      - GITEA_RUNNER_JOB_CONTAINER_NETWORK=gitea
+    volumes:
+      - ./runner-data:/data
+      - ./runner-config.yaml:/config.yaml
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - gitea
+
+networks:
+  gitea:
+    driver: bridge
